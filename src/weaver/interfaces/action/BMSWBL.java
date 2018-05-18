@@ -289,8 +289,7 @@ public class BMSWBL extends BaseBean {
 			}
 		} else {
 			if (!"".equals(zhubanren)) {
-				String sql6 = "select a.requestid,b.requestname,b.currentnodeid,'查看详情' status, c.nodename,f.departmentname,f.id from "
-						+ BMBLFORMTABLE + " "
+				String sql6 = "select a.requestid,b.requestname,b.currentnodeid,'查看详情' status, c.nodename,f.departmentname,f.id from formtable_main_39 "
 						+ "a,WORKFLOW_REQUESTBASE b,WORKFLOW_NODEBASE c,hrmresource d, hrmdepartment f where b.mainrequestid in (select mainrequestid from workflow_requestbase where requestid = '"
 						+ requestid + "') and b.workflowid = '63' and f.id in (" + zhubanren
 						+ ") and a.requestid = b.requestid and c.id = b.currentnodeid and d.id = b.creater and d.departmentid = f.id order by f.showorder asc";
