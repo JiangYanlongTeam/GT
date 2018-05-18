@@ -55,7 +55,7 @@ public class DCDB extends BaseBean {
 		if(!"".equals(_swrqz)) {
 			sql += " and a.swrq <= '"+_swrqz+"' ";
 		}
-		sql += " order by a.swrq desc ";
+		sql += " order by a.requestid desc ";
 		rs.execute(sql);
 		while (rs.next()) {
 			String wh = Util.null2String(rs.getString("wh"));
