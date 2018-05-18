@@ -1,0 +1,53 @@
+{
+	"stepType": 1,
+	"FlowList": [
+		{
+			"FlowId": "分局科室审查提交分局领导审批处理",
+			"FlowType": 1,
+			"Extend_Type": 0,
+			"FlowName": "分局科室审查提交分局领导审批处理",
+			"SelectOption": "0",
+			"SelectedUsers": null,
+			"UserSendCount": 2,
+			"SameUserSendCount": 0,
+			"UserSeachDepData": null,
+			"UserSeachRoleData": null,
+			"UserSeachType": null,
+			"UserSortStr": "",
+			"ShowUserBusinessCount": "1",
+			"UserList": [
+				{
+					"UserId": "aa3ec957-bbf5-4d62-a265-dc0af231be9b",
+					"UserName": "系统管理员",
+					"LoginName": "ADMIN",
+					"Operations": 41,
+					"IsMinOpertionCount": true
+				}
+			],
+			"FlowList": null,
+			"UserGroupList": null,
+			"SubWorkInfo": null
+		},
+		{
+			"FlowId": "岗位内提交",
+			"FlowType": 1,
+			"Extend_Type": 0,
+			"FlowName": "岗位内提交",
+			"SelectOption": "0",
+			"SelectedUsers": null,
+			"UserSendCount": 2,
+			"SameUserSendCount": 0,
+			"UserSeachDepData": null,
+			"UserSeachRoleData": null,
+			"UserSeachType": null,
+			"UserSortStr": "",
+			"ShowUserBusinessCount": "1",
+			"UserList": [],
+			"FlowList": null,
+			"UserGroupList": null,
+			"SubWorkInfo": []
+		}
+	],
+	"sendMethod": 2,
+	"isSingle": 0
+}
