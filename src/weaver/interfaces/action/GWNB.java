@@ -20,7 +20,7 @@ import weaver.interfaces.jiangyl.sfw.SFWUtil;
 public class GWNB extends BaseBean {
 
 	/**
-	 * 主流程获取子流程所有的签名内容-嗷嗷
+	 * 主流程获取子流程所有的签名内容
 	 * 
 	 * @param user
 	 * @param otherparams
