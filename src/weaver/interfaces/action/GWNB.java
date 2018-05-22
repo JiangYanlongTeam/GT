@@ -215,4 +215,8 @@ public class GWNB extends BaseBean {
 		}
 		return data;
 	}
+
+	public static void main(String[] args) {
+		System.out.println("this is a test method ");
+	}
 }
