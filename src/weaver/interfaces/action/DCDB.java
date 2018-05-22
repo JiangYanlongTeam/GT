@@ -70,8 +70,8 @@ public class DCDB extends BaseBean {
 			String CURRENTNODEID = Util.null2String(rs.getString("CURRENTNODEID"));
 
 			Map<String, String> map = new HashMap<String, String>();
-			String name = "<a href='/proj/RequestView.jsp?requestid=" + requestid + "' title='" + gwmc
-					+ "' target='_blank'>" + gwmc + "</a>";
+			String name = "<a onclick=\"openFlow('"+requestid+"')\" title='" + gwmc
+					+ "' style='cursor:pointer'>" + gwmc + "</a>";
 			String fqdb = "";
 			if("0".equals(sfcfdb)) {
 				fqdb = "<a onclick=\"viewDone('" + requestid + "','"+DCDBWORKFLOWID+"')\" title='查看已发起督办' style='cursor:pointer;color:blue'>查看已发起督办</a>";
@@ -82,7 +82,14 @@ public class DCDB extends BaseBean {
 					fqdb = "<a onclick=\"openDCDB('" + requestid + "')\" title='发起督办' style='cursor:pointer;color:blue'>发起督办</a>";
 				}
 			}
-			
+
+			boolean orNot = onclickOrNot(requestid);
+			if(orNot) {
+				map.put("sfdj", "是");
+			} else {
+				map.put("sfdj", "否");
+			}
+
 			map.put("wh", wh);
 			map.put("gwmc", name);
 			map.put("swrq", swrq);
@@ -115,5 +122,20 @@ public class DCDB extends BaseBean {
 		rs.next();
 		String count = Util.null2o(rs.getString("count"));
 		return count;
+	}
+
+	/**
+	 * 查询是否点击
+	 *
+	 * @param iid
+	 * @return
+	 */
+	public boolean onclickOrNot(String iid) {
+		RecordSet rs = new RecordSet();
+		rs.execute("select * from uf_dcdbcxbj where iid = '"+iid+"'");
+		while(rs.next()) {
+			return true;
+		}
+		return false;
 	}
 }
