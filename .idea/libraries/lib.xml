@@ -154,6 +154,7 @@
       <root url="jar://$PROJECT_DIR$/lib/zxing-core.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/hrmExcelOperation.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/ngdbc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/ycclassbean.zip!/" />
       <root url="jar://$PROJECT_DIR$/lib/jurt-3.2.1.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/poi-3.6.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/transExcelOperation.jar!/" />
