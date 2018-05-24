@@ -60,7 +60,7 @@ public class BillFieldUtil {
 	 * @param @param name 数据库字段名称 小写
 	 * @param @param formid 表单ID
 	 * @param @param ismain 是否主表 0:主表 1：明细表
-	 * @param @param num 明细表序号1
+	 * @param @param num 明细表序号111
 	 * @param @return
 	 * @return String
 	 * @throws
