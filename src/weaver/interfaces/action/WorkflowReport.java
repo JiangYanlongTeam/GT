@@ -227,7 +227,7 @@ public class WorkflowReport extends BaseBean{
         }
     }
     /**
-     * 判断角色中是否存在传入人员id
+     * 判断角色中是否存在传入人员id1
      * @param id
      * @return
      */
