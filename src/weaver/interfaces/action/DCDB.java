@@ -21,7 +21,7 @@ public class DCDB extends BaseBean {
 
 	/**
 	 * 督查督办列表（带发起督办功能）
-	 * 
+	 *
 	 * @param user
 	 * @param otherparams
 	 * @param request
@@ -29,7 +29,7 @@ public class DCDB extends BaseBean {
 	 * @return
 	 */
 	public List<Map<String, String>> getDTData(User user, Map<String, String> otherparams, HttpServletRequest request,
-			HttpServletResponse response) {
+											   HttpServletResponse response) {
 		String _wh = Util.null2String(otherparams.get("wh"));
 		String _gwmc = Util.null2String(otherparams.get("gwmc"));
 		String _swrqq = Util.null2String(otherparams.get("swrqq"));
@@ -57,6 +57,7 @@ public class DCDB extends BaseBean {
 		}
 		sql += " order by a.requestid desc ";
 		rs.execute(sql);
+		writeLog("sql:"+sql);
 		while (rs.next()) {
 			String wh = Util.null2String(rs.getString("wh"));
 			String swrq = Util.null2String(rs.getString("swrq"));
@@ -113,7 +114,7 @@ public class DCDB extends BaseBean {
 	 * @return
 	 */
 	public List<Map<String, String>> getDTData2(User user, Map<String, String> otherparams, HttpServletRequest request,
-											   HttpServletResponse response) {
+												HttpServletResponse response) {
 		String type = Util.null2String(otherparams.get("type"));
 		String requestname = Util.null2String(otherparams.get("requestname"));
 		String id = Util.null2String(otherparams.get("reqid"));
@@ -180,20 +181,20 @@ public class DCDB extends BaseBean {
 		}
 		return data;
 	}
-	
-	
+
+
 	public String del(String requestid) {
 		return "<a style=\"color:blue;cursor:pointer;\" target=\"_blank\" onclick=\"del('"+requestid+"')\">删除</a>";
 	}
-	
+
 	public String cbtzd(String requestid) {
 		return "<a style=\"color:blue;cursor:pointer;\" target=\"_blank\" onclick=\"cbtzd('"+requestid+"')\">催办通知单</a>";
 	}
-	
+
 	public String wxtx(String requestid) {
 		return "<a style=\"color:blue;cursor:pointer;\" target=\"_blank\" onclick=\"wxtx('"+requestid+"')\">微信提醒</a>";
 	}
-	
+
 	public String getCBCS(String requestid) {
 		String sql = "select count(*) count from formtable_main_52 where dblc = '"+requestid+"'";
 		RecordSet rs = new RecordSet();
@@ -217,21 +218,21 @@ public class DCDB extends BaseBean {
 		}
 		return false;
 	}
+	/**
+	 * 查询是否点击
+	 *
+	 * @param iid
+	 * @return
+	 */
+	public boolean onclickOrNot2(String iid,int userid) {
+		RecordSet rs = new RecordSet();
+		rs.execute("select * from UF_DCDBCXBJ where iid = '"+iid+"' and hrmid = '"+userid+"'");
+		while(rs.next()) {
+			return true;
+		}
+		return false;
+	}
 
-    /**
-     * 查询是否点击
-     *
-     * @param iid
-     * @return
-     */
-    public boolean onclickOrNot2(String iid,int userid) {
-        RecordSet rs = new RecordSet();
-        rs.execute("select * from uf_dcdbbj where iid = '"+iid+"' and hrmid = '"+userid+"'");
-        while(rs.next()) {
-            return true;
-        }
-        return false;
-    }
 
 	/**
 	 * 判断角色中是否存在传入人员id
