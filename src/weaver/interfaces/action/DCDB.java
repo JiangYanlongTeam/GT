@@ -83,7 +83,7 @@ public class DCDB extends BaseBean {
 				}
 			}
 
-			boolean orNot = onclickOrNot(requestid);
+			boolean orNot = onclickOrNot2(requestid,user.getUID());
 			if(orNot) {
 				map.put("sfdj", "是");
 			} else {
@@ -97,6 +97,85 @@ public class DCDB extends BaseBean {
 			map.put("fqdb", fqdb);
 			map.put("zbbmwb", zbbmwb);
 			map.put("requestid", requestid);
+			data.add(map);
+		}
+		return data;
+	}
+
+
+	/**
+	 * 督查督办列表（带发起督办功能）
+	 *
+	 * @param user
+	 * @param otherparams
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	public List<Map<String, String>> getDTData2(User user, Map<String, String> otherparams, HttpServletRequest request,
+											   HttpServletResponse response) {
+		String type = Util.null2String(otherparams.get("type"));
+		String requestname = Util.null2String(otherparams.get("requestname"));
+		String id = Util.null2String(otherparams.get("reqid"));
+		RecordSet rs = new RecordSet();
+		List<Map<String, String>> data = new ArrayList<Map<String, String>>();
+
+
+		boolean isExist = existInRole(user.getUID()+"");
+		if(!isExist) {
+			return data;
+		}
+
+		String sql = "select * from VIEW_JLDPSYJ a where 1=1 ";
+		if(!"".equals(type)) {
+			sql += " and a.type like '%"+type+"%' ";
+		}
+		if(!"".equals(requestname)) {
+			sql += " and a.requestname like '%"+requestname+"%' ";
+		}
+		if(!"".equals(id)) {
+			sql += " and a.id = '"+id+"' ";
+		}
+		sql += " order by a.maxdate desc ";
+		rs.execute(sql);
+		while (rs.next()) {
+			String _type = Util.null2String(rs.getString("type"));
+			String _workflowid = Util.null2String(rs.getString("workflowid"));
+			String _id = Util.null2String(rs.getString("id"));
+			String _requestname = Util.null2String(rs.getString("requestname"));
+			String _xmyj = Util.null2String(rs.getString("xmyj"));
+			String _wdyj = Util.null2String(rs.getString("wdyj"));
+			String _dhgyj = Util.null2String(rs.getString("dhgyj"));
+			String _fxyyj = Util.null2String(rs.getString("fxyyj"));
+			String _syjyj = Util.null2String(rs.getString("syjyj"));
+			String _pwhyj = Util.null2String(rs.getString("pwhyj"));
+			String _qbyj = Util.null2String(rs.getString("qbyj"));
+			String _wxqyj = Util.null2String(rs.getString("wxqyj"));
+			String _wjmyj = Util.null2String(rs.getString("wjmyj"));
+
+			Map<String, String> map = new HashMap<String, String>();
+			String name = "<a onclick=\"openFlow('"+_id+"')\" title='" + _requestname
+					+ "' style='cursor:pointer'>" + _requestname + "</a>";
+
+			boolean orNot = onclickOrNot(_id,user.getUID());
+			if(orNot) {
+				map.put("sfdj", "是");
+			} else {
+				map.put("sfdj", "否");
+			}
+
+			map.put("typename", _type);
+			map.put("requestname", name);
+			map.put("xmyj", _xmyj);
+			map.put("wdyj", _wdyj);
+			map.put("dhgyj", _dhgyj);
+			map.put("fxyyj", _fxyyj);
+			map.put("syjyj", _syjyj);
+			map.put("pwhyj", _pwhyj);
+			map.put("qbyj", _qbyj);
+			map.put("wxqyj", _wxqyj);
+			map.put("wjmyj", _wjmyj);
+
 			data.add(map);
 		}
 		return data;
@@ -130,9 +209,38 @@ public class DCDB extends BaseBean {
 	 * @param iid
 	 * @return
 	 */
-	public boolean onclickOrNot(String iid) {
+	public boolean onclickOrNot(String iid,int userid) {
 		RecordSet rs = new RecordSet();
-		rs.execute("select * from uf_dcdbcxbj where iid = '"+iid+"'");
+		rs.execute("select * from uf_ldpsck where iid = '"+iid+"' and hrmid = '"+userid+"'");
+		while(rs.next()) {
+			return true;
+		}
+		return false;
+	}
+
+    /**
+     * 查询是否点击
+     *
+     * @param iid
+     * @return
+     */
+    public boolean onclickOrNot2(String iid,int userid) {
+        RecordSet rs = new RecordSet();
+        rs.execute("select * from uf_dcdbbj where iid = '"+iid+"' and hrmid = '"+userid+"'");
+        while(rs.next()) {
+            return true;
+        }
+        return false;
+    }
+
+	/**
+	 * 判断角色中是否存在传入人员id
+	 * @param id
+	 * @return
+	 */
+	public boolean existInRole(String id) {
+		RecordSet rs = new RecordSet();
+		rs.execute("select * from HRMROLEMEMBERS where ROLEID = 541 and resourceid = '"+id+"'");
 		while(rs.next()) {
 			return true;
 		}
