@@ -1,0 +1,53 @@
+html,body{
+margin:0px;
+padding:0px;	
+}
+*{
+font-family:'微软雅黑';	
+}
+.element{
+height:150px;
+overflow:hidden;
+}
+#banner_img li{background-position: center center;height:300px;}
+#imgslider .imgbox{
+width: 100%;
+margin: 0 auto;
+text-align: center;
+height: 150px;
+}
+#imgslider ul{
+padding:0px; 
+margin:0px;
+width: 100%;
+height: 100%;
+}
+#imgslider ul li{
+float:left; 
+list-style:none;
+width: 100%;
+height: 150px; 
+}
+#imgslider ul li.select{
+display:block;
+}
+#imgslider .imgnum div{
+cursor: pointer;
+float: left;
+width: 25%;
+line-height: 40px;
+font-size: 18px;
+background: #c3bbc7;
+opacity: 0.95;
+color:#fff;
+}
+#imgslider .imgnum div.onselect{
+background-color:rgb(33, 61, 125);
+color: #ffffff; opacity: 0.8;
+}
+#imgslider .imgnum{
+text-align: center;
+float: right;
+position: relative;
+width: 100%;top: -40px;
+}

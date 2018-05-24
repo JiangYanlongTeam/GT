@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>南京国土资源局</title>
+		
+		<script type="text/javascript">
+			(function(win,doc){
+			  var docE = doc.documentElement;
+			  var resize = function(){
+			    var deviceWidth = docE.clientWidth;
+			    docE.style.fontSize = deviceWidth /19.2 + 'px';
+			  }
+			  window.onresize = resize;
+			  resize();
+			}(window,document))
+		</script>
+		<link rel="stylesheet" href="css/bootstrap.min.css" />
+		<style>
+			
+			/*public*/
+			html,div,body,p,ul,li,h3,i{
+				padding: 0;
+				margin: 0;
+				text-decoration: none;
+				list-style-type: none;
+				background-position: center;
+				background-size: contain;
+				background-repeat: no-repeat;
+			}
+			iframe{
+				outline: none;
+				border: none;
+			}
+			.box{
+				
+			}
+			
+			/*header*/
+			.box .header{
+				height: 1rem;
+				background-image: url(img/header-bg.png);
+				background-size: cover;
+			}
+			.box .header .header-left,
+			.box .header .header-right,
+			.box .header .header-center{
+				height: 1rem;
+				line-height: 1rem;
+			}
+			.box .header .header-left{
+				padding-left: 2.25rem;
+			}
+			.box .header .header-left p{
+				height: 1rem;
+				line-height: 1rem;
+				color: #FFFFFF;
+				height: 1rem;
+			    line-height: 1rem;
+			    color: #FFFFFF;
+			    font-size: 30px;
+			    font-weight: bold;
+			    position: relative;
+			    padding-left: 0.9rem;
+				
+			}
+			.box .header .header-left p i{
+				display: inline-block;
+				height: 0.86rem;
+				width: 0.86rem;
+				top: 50%;
+				margin-top: -0.43rem;
+				position: absolute;
+				background-image: url(img/header-logo.png);
+				left: 0rem;
+			}
+			.box .header .header-center{
+				
+			}
+			.box .header .header-right{
+				
+			}
+			
+			.box .header .header-right .header-img{
+				height: 1rem;
+				line-height: 1.2rem;
+				text-align: center;
+			}
+			.box .header .header-right .header-img .header-img-inner{
+				height: 0.34rem;
+				width: 0.44rem;
+				display: inline-block;
+			}
+			
+			.box .header .header-right .header-img:nth-child(1) .header-img-inner{
+				background-image: url(img/header-img1.png);
+			}
+			.box .header .header-right .header-img:nth-child(2) .header-img-inner{
+				background-image: url(img/header-img2.png);
+				border-left: 2px solid #FFF;
+    			border-right: 2px solid #FFF;
+			}
+			.box .header .header-right .header-img:nth-child(3) .header-img-inner{
+				background-image: url(img/header-img3.png);
+			}
+			
+			/*content*/
+			.box .content{
+				
+			}
+			.box .content .content-head{
+				height: 1rem;
+				line-height: 1rem;
+				background-color: #FFFFFF;
+				
+			}
+			.box .content .content-head .content-menu{
+				height: 1rem;
+				line-height: 1rem;
+				padding-left: 0px;
+				padding-right: 0px;
+			}
+			.box .content .content-head .content-menu .content-menu-list{
+			    height: 1rem;
+			    line-height: 1rem;
+			    display: inline-block;
+			    width: 11.11%;
+			    padding: 0;
+			    margin: 0;
+			    float: left;
+		        cursor: pointer;
+			}
+			
+			.box .content .content-head .content-menu .content-menu-list .content-menu-list-img{
+				height: 0.56rem;
+				background-size: 40% 70%;
+			}
+			
+			.box .content .content-head .content-menu .content-menu-list .content-menu-list-text{
+				height: 0.42rem;
+				line-height: 0.42rem;
+				text-align: center;
+			}
+			
+			.box .content .content-head .content-menu .content-menu-list .content-menu-list-text span{
+				text-align: center;
+				color: #61C3F2;
+				font-size: 24px;
+			}
+			
+			
+			.box .content .content-head .content-menu .content-menu-list:nth-child(1) .content-menu-list-img{
+				background-image: url(img/head-menu-1.png);
+			}
+			.box .content .content-head .content-menu .content-menu-list:nth-child(2) .content-menu-list-img{
+				background-image: url(img/head-menu-2.png);
+			}
+			.box .content .content-head .content-menu .content-menu-list:nth-child(3) .content-menu-list-img{
+				background-image: url(img/head-menu-3.png);
+			}
+			.box .content .content-head .content-menu .content-menu-list:nth-child(4) .content-menu-list-img{
+				background-image: url(img/head-menu-4.png);
+			}
+			.box .content .content-head .content-menu .content-menu-list:nth-child(5) .content-menu-list-img{
+				background-image: url(img/head-menu-5.png);
+			}
+			.box .content .content-head .content-menu .content-menu-list:nth-child(6) .content-menu-list-img{
+				background-image: url(img/head-menu-6.png);
+			}
+			.box .content .content-head .content-menu .content-menu-list:nth-child(7) .content-menu-list-img{
+				background-image: url(img/head-menu-7.png);
+			}
+			.box .content .content-head .content-menu .content-menu-list:nth-child(8) .content-menu-list-img{
+				background-image: url(img/head-menu-8.png);
+			}
+			.box .content .content-head .content-menu .content-menu-list:nth-child(9) .content-menu-list-img{
+				background-image: url(img/head-menu-9.png);
+			}
+			
+			.box .content .content-body{
+				height: 7.5rem;
+				background-color: #F2F2F2;
+				padding: 0.25rem 0rem;
+			}
+			.box .content .content-body .content-inner{
+				background-color: #FFFFFF;
+			    height: 7rem;
+			    padding: 0.6rem 0.78rem 0.26rem 0.78rem;
+			}
+			.box .content .content-body .content-inner .inner-box{
+				height: 6.12rem;
+				width: 100%;
+			}
+			.box .content .content-body .content-inner .content-inner-left,
+			.box .content .content-body .content-inner .content-inner-right{
+				height: 6.12rem;
+			}
+			.box .content .content-body .content-inner .content-inner-left{
+				
+			}
+			.box .content .content-body .content-inner .content-inner-left .content-inner-left-title{
+				height: 0.8rem;
+				line-height: 0.8rem;
+				background-color: #3966A7;
+				text-align: center;
+			}
+			.box .content .content-body .content-inner .content-inner-left .content-inner-left-title h3{
+				color: #FFFFFF;
+				position: relative;
+				height: 0.8rem;
+				line-height: 0.8rem;
+				font-size: 0.36rem;
+			}
+			.box .content .content-body .content-inner .content-inner-left .content-inner-left-title h3 i{
+				width: 0.35rem;
+			    height: 0.35rem;
+			    background-image: url(img/left-title.png);
+			    position: absolute;
+			    top: 50%;
+			    margin-top: -0.175rem;
+			    left: 0.6rem;
+			}
+			.box .content .content-body .content-inner .content-inner-left .content-inner-left-body{
+				
+			}
+			.box .content .content-body .content-inner .content-inner-left .content-inner-left-body .content-inner-left-body-list{
+				height: 1.05rem;
+				line-height: 1.05rem;
+				background-color: #F3F3F3;
+			}
+			.box .content .content-body .content-inner .content-inner-left .content-inner-left-body .content-inner-left-body-list .content-inner-left-body-list-inner .top-img{
+				background-size: 30% 60%;
+			}
+			.box .content .content-body .content-inner .content-inner-left .content-inner-left-body .content-inner-left-body-list:nth-child(1) .content-inner-left-body-list-inner:nth-child(1) .top-img{
+				background-image: url(img/left-1.png);
+			}
+			.box .content .content-body .content-inner .content-inner-left .content-inner-left-body .content-inner-left-body-list:nth-child(1) .content-inner-left-body-list-inner:nth-child(2) .top-img{
+				background-image: url(img/left-2.png);
+			}
+			
+			.box .content .content-body .content-inner .content-inner-left .content-inner-left-body .content-inner-left-body-list:nth-child(2) .content-inner-left-body-list-inner:nth-child(1) .top-img{
+				background-image: url(img/left-3.png);
+			}
+			.box .content .content-body .content-inner .content-inner-left .content-inner-left-body .content-inner-left-body-list:nth-child(2) .content-inner-left-body-list-inner:nth-child(2) .top-img{
+				background-image: url(img/left-4.png);
+			}
+			
+			.box .content .content-body .content-inner .content-inner-left .content-inner-left-body .content-inner-left-body-list:nth-child(3) .content-inner-left-body-list-inner:nth-child(1) .top-img{
+				background-image: url(img/left-5.png);
+			}
+			.box .content .content-body .content-inner .content-inner-left .content-inner-left-body .content-inner-left-body-list:nth-child(3) .content-inner-left-body-list-inner:nth-child(2) .top-img{
+				background-image: url(img/left-6.png);
+			}
+			
+			.box .content .content-body .content-inner .content-inner-left .content-inner-left-body .content-inner-left-body-list:nth-child(4) .content-inner-left-body-list-inner:nth-child(1) .top-img{
+				background-image: url(img/left-7.png);
+			}
+			.box .content .content-body .content-inner .content-inner-left .content-inner-left-body .content-inner-left-body-list:nth-child(4) .content-inner-left-body-list-inner:nth-child(2) .top-img{
+				background-image: url(img/left-8.png);
+			}
+			
+			.box .content .content-body .content-inner .content-inner-left .content-inner-left-body .content-inner-left-body-list:nth-child(5) .content-inner-left-body-list-inner:nth-child(1) .top-img{
+				background-image: url(img/left-9.png);
+			}
+			.box .content .content-body .content-inner .content-inner-left .content-inner-left-body .content-inner-left-body-list:nth-child(5) .content-inner-left-body-list-inner:nth-child(2) .top-img{
+				background-image: url(img/left-10.png);
+			}
+			
+			
+			.box .content .content-body .content-inner .content-inner-left .content-inner-left-body .content-inner-left-body-list .content-inner-left-body-list-inner{
+				height: 1.05rem;
+				line-height: 1.05rem;
+				border: 1px solid #E5E5E5;
+				cursor: pointer;
+			}
+			.box .content .content-body .content-inner .content-inner-left .content-inner-left-body .content-inner-left-body-list .content-inner-left-body-list-inner .top-img{
+				height: 0.6rem;
+				line-height: 0.6rem;
+			}
+			
+			.box .content .content-body .content-inner .content-inner-left .content-inner-left-body .content-inner-left-body-list .content-inner-left-body-list-inner .bottom-text{
+				height: 0.45rem;
+				line-height: 0.45rem;
+				text-align: center;
+			}
+			
+			.box .content .content-body .content-inner .content-inner-right{
+				
+			}
+			.box .content .content-body .content-inner .content-inner-right .content-inner-right-top{
+				border: 1px solid #E5E5E5;
+				    margin-bottom: 0.1rem;
+			}
+			.box .content .content-body .content-inner .content-inner-right .content-inner-right-bottom{
+				border: 1px solid #E5E5E5;
+			}
+			.box .content .content-body .content-inner .content-inner-right .content-inner-right-top .content-inner-right-title p,
+			.box .content .content-body .content-inner .content-inner-right .content-inner-right-bottom .content-inner-right-title p{
+				height: 0.5rem;
+				line-height: 0.5rem;
+				font-size: 25px;
+				color: #191919;
+				position: relative;
+				padding-left: 60px;
+				border-bottom: 1px dashed #E5E5E5;
+			}
+			.box .content .content-body .content-inner .content-inner-right .content-inner-right-top .content-inner-right-title p .title-img,
+			.box .content .content-body .content-inner .content-inner-right .content-inner-right-bottom .content-inner-right-title p .title-img,
+			.box .content .content-body .content-inner .content-inner-right .content-inner-right-top .content-inner-right-title p .title-btn,
+			.box .content .content-body .content-inner .content-inner-right .content-inner-right-bottom .content-inner-right-title p .title-btn{
+			    height: 0.5rem;
+			    line-height:  0.5rem;
+			   /* background-color: red;*/
+			    display: inline-block;
+			    width:  0.5rem;
+			    position: absolute;
+			    top: 50%;
+			    margin-top: -0.25rem;
+			    left: 0px;
+		        cursor: pointer;
+			    background-size: 50% 50%;
+			    background-image: url(img/head-menu-5.png);
+			}
+			.box .content .content-body .content-inner .content-inner-right .content-inner-right-top .content-inner-right-title p .title-btn,
+			.box .content .content-body .content-inner .content-inner-right .content-inner-right-bottom .content-inner-right-title p .title-btn{
+				left: 93%;
+			}
+			
+			.box .content .content-body .content-inner .content-inner-right .content-inner-right-top .content-inner-top-box{
+				height: 1.96rem;
+			}
+			.box .content .content-body .content-inner .content-inner-right .content-inner-right-top .content-inner-top-box .content-inner-right-model,
+			.box .content .content-body .content-inner .content-inner-right .content-inner-right-bottom .content-inner-bottom-box .content-inner-right-model{
+				height: 0.98rem;
+			    padding: 0.1rem 0.1rem;
+			}
+			
+			.box .content .content-body .content-inner .content-inner-right .content-inner-right-bottom .content-inner-bottom-box .content-inner-right-model .border-box{
+				height: 0.78rem;
+    			width: 100%;
+			}
+			
+			.box .content .content-body .content-inner .content-inner-right .content-inner-right-bottom .content-inner-bottom-box .content-inner-right-model:nth-child(1) .border-box{
+				background-color: #DAA6E3;
+			}
+			
+			.box .content .content-body .content-inner .content-inner-right .content-inner-right-bottom .content-inner-bottom-box .content-inner-right-model:nth-child(2) .border-box{
+				background-color: #88C896;
+			}
+			
+			.box .content .content-body .content-inner .content-inner-right .content-inner-right-bottom .content-inner-bottom-box .content-inner-right-model:nth-child(3) .border-box{
+				background-color: #F2A6A3;
+			}
+			
+			.box .content .content-body .content-inner .content-inner-right .content-inner-right-bottom .content-inner-bottom-box .content-inner-right-model:nth-child(4) .border-box{
+				background-color: #8B96CA;
+			}
+			
+			.box .content .content-body .content-inner .content-inner-right .content-inner-right-bottom .content-inner-bottom-box .content-inner-right-model:nth-child(5) .border-box{
+				background-color: #65D0BC;
+			}
+			
+			.box .content .content-body .content-inner .content-inner-right .content-inner-right-bottom .content-inner-bottom-box .content-inner-right-model:nth-child(6) .border-box{
+				background-color: #F387BC;
+			}
+			
+			.box .content .content-body .content-inner .content-inner-right .content-inner-right-bottom .content-inner-bottom-box .content-inner-right-model:nth-child(7) .border-box{
+				background-color: #B1D365;
+			}
+			
+			.box .content .content-body .content-inner .content-inner-right .content-inner-right-bottom .content-inner-bottom-box .content-inner-right-model:nth-child(8) .border-box{
+				background-color: #51A1B9;
+			}
+			
+			.box .content .content-body .content-inner .content-inner-right .content-inner-right-bottom .content-inner-bottom-box .content-inner-right-model:nth-child(9) .border-box{
+				background-color: #F29A75;
+			}
+			
+			.box .content .content-body .content-inner .content-inner-right .content-inner-right-bottom .content-inner-bottom-box .content-inner-right-model:nth-child(10) .border-box{
+				background-color: #FFF798;
+			}
+			.box .content .content-body .content-inner .content-inner-right .content-inner-right-bottom .content-inner-bottom-box .content-inner-right-model .border-box .left-border{
+				height: 0.78rem;
+				background-size: 50%;
+			}
+			
+			.box .content .content-body .content-inner .content-inner-right .content-inner-right-bottom .content-inner-bottom-box .content-inner-right-model:nth-child(1) .border-box .left-border{
+				background-image: url(img/head-menu-4.png);
+			}
+			.box .content .content-body .content-inner .content-inner-right .content-inner-right-bottom .content-inner-bottom-box .content-inner-right-model:nth-child(2) .border-box .left-border{
+				background-image: url(img/head-menu-4.png);
+			}
+			.box .content .content-body .content-inner .content-inner-right .content-inner-right-bottom .content-inner-bottom-box .content-inner-right-model:nth-child(3) .border-box .left-border{
+				background-image: url(img/head-menu-4.png);
+			}
+			.box .content .content-body .content-inner .content-inner-right .content-inner-right-bottom .content-inner-bottom-box .content-inner-right-model:nth-child(4) .border-box .left-border{
+				background-image: url(img/head-menu-4.png);
+			}
+			.box .content .content-body .content-inner .content-inner-right .content-inner-right-bottom .content-inner-bottom-box .content-inner-right-model:nth-child(5) .border-box .left-border{
+				background-image: url(img/head-menu-4.png);
+			}
+			.box .content .content-body .content-inner .content-inner-right .content-inner-right-bottom .content-inner-bottom-box .content-inner-right-model:nth-child(6) .border-box .left-border{
+				background-image: url(img/head-menu-4.png);
+			}
+			.box .content .content-body .content-inner .content-inner-right .content-inner-right-bottom .content-inner-bottom-box .content-inner-right-model:nth-child(7) .border-box .left-border{
+				background-image: url(img/head-menu-4.png);
+			}
+			.box .content .content-body .content-inner .content-inner-right .content-inner-right-bottom .content-inner-bottom-box .content-inner-right-model:nth-child(8) .border-box .left-border{
+				background-image: url(img/head-menu-4.png);
+			}
+			.box .content .content-body .content-inner .content-inner-right .content-inner-right-bottom .content-inner-bottom-box .content-inner-right-model:nth-child(9) .border-box .left-border{
+				background-image: url(img/head-menu-4.png);
+			}
+			.box .content .content-body .content-inner .content-inner-right .content-inner-right-bottom .content-inner-bottom-box .content-inner-right-model:nth-child(10) .border-box .left-border{
+				background-image: url(img/head-menu-4.png);
+			}
+			
+			
+			
+			.box .content .content-body .content-inner .content-inner-right .content-inner-right-bottom .content-inner-bottom-box .content-inner-right-model .border-box .right-border{
+			}
+			
+			.box .content .content-body .content-inner .content-inner-right .content-inner-right-bottom .content-inner-bottom-box .content-inner-right-model .border-box .right-border  p{
+				height: 0.39rem;
+			    line-height: 0.39rem;
+			    color: #FFF;
+			    text-align: center;
+			}
+			
+			
+			.box .content .content-body .content-inner .content-inner-right .content-inner-right-bottom .content-inner-bottom-box{
+				height: 2.96rem;
+			}
+			.box .content .content-body .content-inner .content-inner-right .content-inner-right-top .content-inner-top-box .content-inner-right-model .left-border{
+				height: 0.78rem;
+				background-size: 50% 50%;
+			}
+			
+			.box .content .content-body .content-inner .content-inner-right .content-inner-right-top .content-inner-top-box .content-inner-right-model:nth-child(1) .left-border{
+				background-image: url(img/head-menu-2.png);
+			}
+			.box .content .content-body .content-inner .content-inner-right .content-inner-right-top .content-inner-top-box .content-inner-right-model:nth-child(2) .left-border{
+				background-image: url(img/head-menu-2.png);
+			}
+			.box .content .content-body .content-inner .content-inner-right .content-inner-right-top .content-inner-top-box .content-inner-right-model:nth-child(3) .left-border{
+				background-image: url(img/head-menu-2.png);
+			}
+			
+			.box .content .content-body .content-inner .content-inner-right .content-inner-right-top .content-inner-top-box .content-inner-right-model:nth-child(4) .left-border{
+				background-image: url(img/head-menu-2.png);
+			}
+			.box .content .content-body .content-inner .content-inner-right .content-inner-right-top .content-inner-top-box .content-inner-right-model:nth-child(5) .left-border{
+				background-image: url(img/head-menu-2.png);
+			}
+			.box .content .content-body .content-inner .content-inner-right .content-inner-right-top .content-inner-top-box .content-inner-right-model:nth-child(6) .left-border{
+				background-image: url(img/head-menu-2.png);
+			}
+			
+			
+			
+			.box .content .content-body .content-inner .content-inner-right .content-inner-right-top .content-inner-top-box .content-inner-right-model .right-border{
+				height: 0.78rem;
+			    
+			}
+			
+			.box .content .content-body .content-inner .content-inner-right .content-inner-right-top .content-inner-top-box .content-inner-right-model .right-border p{
+				height: 0.39rem;
+			    line-height: 0.39rem;
+			    color: #FFF;
+			    text-align: center;
+			}
+			.box .content .content-body .content-inner .content-inner-right .content-inner-right-bottom .content-inner-bottom-box .content-inner-right-model .border-box .right-border  p:nth-child(1),
+			.box .content .content-body .content-inner .content-inner-right .content-inner-right-top .content-inner-top-box .content-inner-right-model .right-border p:nth-child(1){
+				font-size: 0.25rem;
+				cursor: pointer;
+			}
+			.box .content .content-body .content-inner .content-inner-right .content-inner-right-bottom .content-inner-bottom-box .content-inner-right-model .border-box .right-border  p:nth-child(2),
+			.box .content .content-body .content-inner .content-inner-right .content-inner-right-top .content-inner-top-box .content-inner-right-model .right-border p:nth-child(2){
+				font-size: 0.16rem;
+			}
+			
+			
+			.box .content .content-body .content-inner .content-inner-right .content-inner-right-top .content-inner-top-box .content-inner-right-model{
+			    padding: 0.1rem  0.1rem;
+			}
+			.box .content .content-body .content-inner .content-inner-right .content-inner-right-top .content-inner-top-box .content-inner-right-model .border-box{
+				height: 0.78rem;
+				width:100%;
+			}
+			
+			.box .content .content-body .content-inner .content-inner-right .content-inner-right-top .content-inner-top-box .content-inner-right-model:nth-child(1) .border-box{
+				background-color: #6FC07C;
+			}
+			.box .content .content-body .content-inner .content-inner-right .content-inner-right-top .content-inner-top-box .content-inner-right-model:nth-child(2) .border-box{
+				background-color: #ECC941;
+			}
+			.box .content .content-body .content-inner .content-inner-right .content-inner-right-top .content-inner-top-box .content-inner-right-model:nth-child(3) .border-box{
+				background-color: #F2A6A3;
+			}
+			.box .content .content-body .content-inner .content-inner-right .content-inner-right-top .content-inner-top-box .content-inner-right-model:nth-child(4) .border-box{
+				background-color: #F5AA6D;
+			}
+			.box .content .content-body .content-inner .content-inner-right .content-inner-right-top .content-inner-top-box .content-inner-right-model:nth-child(5) .border-box{
+				background-color: #65D0BC;
+			}
+			.box .content .content-body .content-inner .content-inner-right .content-inner-right-top .content-inner-top-box .content-inner-right-model:nth-child(6) .border-box{
+				background-color: #D37371;
+			}
+			
+			
+			/*footer*/
+			.box .footer{
+				height: 0.5rem;
+				line-height: 0.5rem;
+				background-color: #434448;
+				text-align: center;
+				color: #F0F0F0;
+			}
+			
+			/*重写bootstrap的样式*/
+			.col-md-12,
+			.col-lg-12{
+				padding-left:0px;
+				padding-right: 0px;
+			}
+			.col-md-3,
+			.col-lg-3,
+			.col-md-3,
+			.col-lg-2{
+				padding-left: 0px;
+				padding-right: 0px;
+			}
+		</style>
+	</head>
+	<body>
+		
+		
+		<div class="box col-md-12	col-lg-12">
+			
+			
+			<!--header-->
+			<div class="header col-md-12 col-lg-12">
+				
+				<!--header left-->
+				<div class="header-left col-md-5 col-lg-5">
+					<p><i></i>南京市国土资源局</p>
+				</div>
+				
+				<!--header center-->
+				<div class="header-center col-md-5 col-lg-5"></div>
+				
+				<!--header right-->
+				<div class="header-right col-md-2 col-lg-2">
+					<div class="header-img col-md-2 col-lg-2">
+						<div class="header-img-inner"></div>
+					</div>
+					<div class="header-img col-md-2 col-lg-2">
+						<div class="header-img-inner"></div>
+					</div>
+					<div class="header-img col-md-2 col-lg-2">
+						<div class="header-img-inner"></div>
+					</div>
+					
+				</div>
+			</div>
+			
+			<!--content-->
+			<div class="content">
+				
+				<!--content head-->
+				<div class="content-head col-md-12	col-lg-12">
+					<div class="content-menu col-md-8 col-lg-8 col-md-offset-2 col-lg-offset-2">
+						
+						<div class="content-menu-list" id="personnal">
+							<div class="content-menu-list-img"></div>
+							<div class="content-menu-list-text">
+								<span>个人桌面</span>
+							</div>
+						</div>
+						<div class="content-menu-list">
+							<div class="content-menu-list-img"></div>
+							<div class="content-menu-list-text">
+								<span>公文收发</span>
+							</div>
+						</div>
+						<div class="content-menu-list">
+							<div class="content-menu-list-img"></div>
+							<div class="content-menu-list-text">
+								<span>督察督办</span>
+							</div>
+						</div>
+						<div class="content-menu-list">
+							<div class="content-menu-list-img"></div>
+							<div class="content-menu-list-text">
+								<span>信息拟报</span>
+							</div>
+						</div>
+						<div class="content-menu-list">
+							<div class="content-menu-list-img"></div>
+							<div class="content-menu-list-text">
+								<span>固定资产</span>
+							</div>
+						</div>
+						<div class="content-menu-list">
+							<div class="content-menu-list-img"></div>
+							<div class="content-menu-list-text">
+								<span>请假管理</span>
+							</div>
+						</div>
+						<div class="content-menu-list">
+							<div class="content-menu-list-img"></div>
+							<div class="content-menu-list-text">
+								<span>车辆派发</span>
+							</div>
+						</div>
+						<div class="content-menu-list">
+							<div class="content-menu-list-img"></div>
+							<div class="content-menu-list-text">
+								<span>材料传送</span>
+							</div>
+						</div>
+						<div class="content-menu-list">
+							<div class="content-menu-list-img"></div>
+							<div class="content-menu-list-text">
+								<span>会议管理</span>
+							</div>
+						</div>
+						
+					</div>
+				</div>
+				<iframe src="index1.html" id="contentIframe" width="1900" height="740"></iframe>				
+			</div>
+			
+			<!--footer-->
+			<div class="footer col-md-12 col-lg-12">
+				<p>南京市国土资源局</p>
+			</div>
+			
+		</div>
+		<script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
+		<script type="text/javascript">
+			
+			$(function(){
+				
+				$("#title-btn-1").bind("click",function(){
+					$("#top-box").toggle(1000);
+					
+				});
+				
+				$("#title-btn-2").bind("click",function(){
+					$("#bottom-box").toggle(1000);
+					
+				});
+				
+				$("#personnal").bind("click",function(){
+					$("#contentIframe").attr("src","index1.html");
+				});
+			})
+			
+		</script>
+		
+	</body>
+</html>

@@ -1,0 +1,77 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>jquery鼠标划过内容背景滑动切换</title>
+
+<link href="/test/element/17/css/style.css" rel="stylesheet" type="text/css">
+
+<script src="/test/element/17/js/jquery-1_002.js" type="text/javascript"></script>
+
+</head>
+<body>
+
+<div class="servicesBox">
+
+	<div class="serBox">
+		<div class="serBoxOn"></div>
+		<div class="pic1"> <img src="images/3.png"> </div>
+		<div class="pic2"> <img src="images/3-3.png"> </div>
+		<div class="txt1"> <span class="tit">开心网</span><p>开心网营销</p></div>
+		<div class="txt2"><a href="" target="_blank" class="a_jump"><span class="tit">开心网</span><p>开心网营销</p></a></div>
+	</div>
+
+	<div class="serBox">
+		<div class="serBoxOn"></div>
+		<div class="pic1"> <img src="images/1.png"> </div>
+		<div class="pic2"> <img src="images/1-1.png"> </div>
+		<div class="txt1"> <span class="tit">人人网</span><p>人人网营销</p></div>
+		<div class="txt2"> <a href="#" target="_blank" class="a_jump"><span class="tit">人人网</span><p>人人网营销</p></a> </div>
+	</div>
+
+	<div class="serBox">
+		<div class="serBoxOn"></div>
+		<div class="pic1"> <img src="images/2.png"> </div>
+		<div class="pic2"> <img src="images/2-2.png"> </div>
+		<div class="txt1"> <span class="tit">QQ空间</span><p>QQ空间营销</p></div>
+		<div class="txt2"> <a href="#" target="_blank" class="a_jump"><span class="tit">QQ空间</span><p>QQ空间营销</p></a> </div>
+	</div>
+
+	<div class="serBox">
+		<div class="serBoxOn"></div>
+		<div class="pic1"> <img src="images/35.png"> </div>
+		<div class="pic2"> <img src="images/35-35.png"> </div>
+		<div class="txt1"> <span class="tit">问答营销</span><p>问答投放 锁住潜在客户</p></div>
+		<div class="txt2"> <a href="#" target="_blank" class="a_jump"><span class="tit">问答营销</span><p>问答投放 锁住潜在客户</p></a> </div>
+	</div>
+
+	<div class="serBox">
+		<div class="serBoxOn"></div>
+		<div class="pic1"> <img src="images/31.png"> </div>
+		<div class="pic2"> <img src="images/31-31.png"> </div>
+		<div class="txt1"> <span class="tit">邮件推广</span><p>低成本 商机无限</p></div>
+		<div class="txt2"> <a href="#" target="_blank" class="a_jump"><span class="tit">邮件推广</span><p>低成本 商机无限</p></a> </div>
+	</div>
+	
+</div>
+
+<script type="text/javascript">
+$(".serBox").hover(function () {
+	 $(this).children().stop(false,true);
+	 $(this).children(".serBoxOn").fadeIn("slow");
+     $(this).children(".pic1").animate({right: -110},400);
+     $(this).children(".pic2").animate({left: 41},400);
+     $(this).children(".txt1").animate({left: -240},400);
+     $(this).children(".txt2").animate({right: 0},400);	
+},function () {
+	 $(this).children().stop(false,true);
+	 $(this).children(".serBoxOn").fadeOut("slow");
+	 $(this).children(".pic1").animate({right:41},400);
+     $(this).children(".pic2").animate({left: -110},400);
+     $(this).children(".txt1").animate({left: 0},400);
+     $(this).children(".txt2").animate({right: -240},400);	
+});
+</script>
+
+</body>
+</html>

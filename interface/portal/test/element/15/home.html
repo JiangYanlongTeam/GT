@@ -1,0 +1,587 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- saved from url=(0054)http://www.e-cology.com.cn/technologyportal/ziliao.jsp -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title></title>
+<script type="text/javascript" src="./ziliao_files/jquery.min_wev8.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+	$("#settingico").hover(function () {
+		$(this).attr("src", "/technologyportal/img/ssetting_slt.png");	
+	}, function () {
+		$(this).attr("src", "/technologyportal/img/ssetting.png");	
+	});
+	
+	$("#settingico").bind("click", function () {
+		var dialog = new window.top.Dialog();
+		dialog.currentWindow = window;
+		dialog.URL = "/technologyportal/ziliaosetting.jsp";
+		dialog.Title = "详细设置";
+		dialog.Width = 650;
+		dialog.Height = 700;
+		dialog.normalDialog = false;
+		dialog.callbackfun = function (paramobj, id1) {
+			window.location.reload();
+		};
+		dialog.show();
+	});
+	
+});
+
+
+function openDoc(id) {
+	window.open("/docs/docs/DocDsp.jsp?id="+id);
+}
+
+function openDocMore(id) {
+	window.open("/docs/search/DocSearchTab.jsp?seccategory="+id);
+}
+
+function openDocUrl(url) {
+	window.open(url);
+}
+
+function onShowPersonInfo(){	
+	var dialog = new window.top.Dialog();
+	dialog.currentWindow = window;
+	dialog.URL = "/technologyportal/personInfo.jsp";
+	dialog.Title = "e-cology技术业务负责人速查";
+	dialog.Width = 1050;
+	dialog.Height = 1000;
+	dialog.normalDialog = false;
+	dialog.callbackfun = function (paramobj, id1) {
+	};
+	dialog.show();
+}
+
+function onShowServerInfo(){	
+	var dialog = new window.top.Dialog();
+	dialog.currentWindow = window;
+	dialog.URL = "/technologyportal/serverInfo.jsp";
+	dialog.Title = "e-cology服务器速查";
+	dialog.Width = 1050;
+	dialog.Height = 1000;
+	dialog.normalDialog = false;
+	dialog.callbackfun = function (paramobj, id1) {
+	};
+	dialog.show();
+}
+
+function showPersonInfo(e) {
+	$(".personInfoCon").hide();
+
+	var event = $.event.fix(e); 
+	var elem = event.target;
+	var left = $(elem).offset().left
+	var top = $(elem).offset().top
+	//alert(top)
+	//console.log("left:"+left);
+	//console.log("top:"+top);
+	
+	docid = $(elem).parents("li:first").attr("docid");
+
+	var divHeight = $("#personInfo_"+docid).height();
+	var wHieght =  document.documentElement.clientHeight;
+	
+	//console.log("divHeight:"+divHeight);
+	//console.log("wHieght:"+wHieght);
+	
+	ps = "";
+	if(wHieght-top-35>=divHeight){
+		ps = "top";
+		top=top+27;
+	}else{
+		ps = "bottom";
+		top = wHieght-top+14;
+	}
+	//alert(left)
+	//$("#personInfo_"+docid).css("top",top+30);
+	$("#personInfo_"+docid).css(ps,top);
+	//console.log("top:"+top)
+	$("#personInfo_"+docid).css("left",left+23-$("#personInfo_"+docid).width());
+	$("#personInfo_"+docid).show();
+	
+	$(elem).parent().addClass("bghover");
+	$(elem).parent().find(".point").removeClass("point").addClass("pointhover");
+	$(elem).parent().find("a").addClass("ahover");
+	
+	event.stopPropagation();
+}
+
+function isShowExpand(docid) {
+	if($("#personInfo_"+docid).length > 0) {
+		$("#expand_"+docid).show();
+	}
+}
+
+function hideExpand(docid) {
+	$(".expand").hide();
+}
+
+function show_coords(event){
+	var x = event.clientX;
+	var y = event.clientY;
+	
+	try {
+		var docleft = $("#personInfo_"+docid).offset().left;
+		var doctop = $("#personInfo_"+docid).offset().top;
+		var docwidth = $("#personInfo_"+docid).width();
+		var docheight = $("#personInfo_"+docid).height();
+
+		if ("top" == ps) {
+			if (y+40 < doctop || x < docleft || y > doctop + docheight || x > docleft + docwidth) {
+				$(".personInfoCon").hide();
+				$("li").find(".bg").removeClass("bghover");
+				$("li").find(".pointhover").addClass("point").removeClass("pointhover");
+				$("li").find("a").removeClass("ahover");
+				$("#expand_"+docid).hide();
+				
+				docid="";
+			} else {
+				$("#expand_"+docid).show();
+			}
+		} else {
+			if (y < doctop || x < docleft || y > doctop + docheight + 40 || x > docleft + docwidth) {
+				$(".personInfoCon").hide();
+				$("li").find(".bg").removeClass("bghover");
+				$("li").find(".pointhover").addClass("point").removeClass("pointhover");
+				$("li").find("a").removeClass("ahover");
+				$("#expand_"+docid).hide();
+				
+				docid="";
+			}  else {
+				$("#expand_"+docid).show();
+			}
+		}
+		
+	} catch(e) {}
+	
+}
+</script>
+<style type="text/css">
+body {
+	margin: 0;
+	padding: 0;
+	background-color: #f5f8fa;
+}
+
+.container {
+	width: 100%;
+	height: 100%;
+	margin-top: 34px;
+}
+
+.ecology {
+	float: left;
+	width: 23%;
+	text-align: center;
+	padding-left: 1%;
+	padding-right: 1%;
+}
+
+.emobile {
+	float: left;
+	width: 23%;
+	text-align: center;
+	padding-left: 1%;
+	padding-right: 1%;
+}
+
+.product {
+	float: left;
+	width: 23%;
+	text-align: center;
+	padding-left: 1%;
+	padding-right: 1%;
+}
+
+.resource {
+	float: left;
+	width: 23%;
+	text-align: center;
+	padding-left: 1%;
+	padding-right: 1%;
+}
+
+.bg_div {
+	width: 154px;
+	height: 116px;
+	margin: 0 auto;
+}
+
+.title {
+	font-family: 微软雅黑;
+	font-size: 16px;
+}
+
+.line1 {
+	border-bottom: 1px solid #b2eafe;
+	margin-top: 16px;
+}
+
+.line2 {
+	border-bottom: 1px solid #d2f0cf;
+	margin-top: 16px;
+}
+
+.line3 {
+	border-bottom: 1px solid #cedafd;
+	margin-top: 16px;
+}
+
+.line4 {
+	border-bottom: 1px solid #ffe4c5;
+	margin-top: 16px;
+}
+
+ul {
+	padding: 0;
+	margin: 8px 0 0 0;
+	text-align: left;
+}
+
+ul li {
+	line-height: 35px;
+	list-style: none;
+	margin-bottom: 3px;
+}
+
+.bg {
+	line-height: 35px;
+	position: relative;
+}
+
+.point {
+	background: url('img/k.png') no-repeat;
+	width: 5px;
+	height: 5px;
+	display: inline-block;
+	vertical-align: middle;
+	margin-left: 18px;
+	position: absolute;
+	top: 15px;
+}
+
+ul li a {
+	color: #6e6e6e;
+	font-family: 微软雅黑;
+	font-size: 14px;
+	text-decoration: none;
+	margin-left: 32px;
+	display: inline-block;
+    word-break: keep-all;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: 75%;
+}
+
+.bg:hover {
+	width: 100%;
+	border: none;
+	display: inline-block;
+	outline: 0;
+	overflow: hidden;
+	background-color: #fff;
+	cursor: pointer;
+	box-shadow: 0px 0px 10px #eaeaea;
+}
+
+.bg:hover .point {
+	background: url('img/k_h.png');
+}
+
+.bg:hover a {
+	color: #59c7f5;
+}
+
+.bghover {
+	width: 100%;
+	border: none;
+	display: inline-block;
+	outline: 0;
+	overflow: hidden;
+	background-color: #fff;
+	cursor: pointer;
+	box-shadow: 0px 0px 10px #eaeaea;
+}
+
+.pointhover {
+	background: url('img/k_h.png');
+	width: 5px;
+	height: 5px;
+	display: inline-block;
+	vertical-align: middle;
+	margin-left: 18px;
+	position: absolute;
+	top: 15px;
+}
+
+.ahover {
+	color: #59c7f5 !important;
+}
+
+.more {
+	background: url('/technologyportal/img/more_wev8.png'); 
+	width: 34px; 
+	height: 12px; 
+	margin-left: 32px;
+	margin-top: 10px;
+	cursor: pointer;
+}
+
+.expand {
+	background: url('img/expand.png') no-repeat;
+	width: 14px;
+	height: 14px;
+	display: inline-block;
+	vertical-align: middle;
+	float: right;
+    position: relative;
+    top: 11px;
+    right: 10px;
+    display: none;
+}
+
+.personInfoCon {
+	width:23%;
+	text-align: center;
+	background: #f8f8f8;
+	border-radius: 6px;
+	border:1px solid #e4e4e4; 
+	box-shadow: 0px 0px 20px #eaeaea;
+	position: absolute;
+	display:none;
+}
+
+.personInfoTitleDiv {
+	line-height: 30px;
+}
+
+.personInfoTitleSpan {
+	font-family:微软雅黑;
+	font-size:14px;
+	color:#9b9b9b
+}
+
+.personInfoName {
+	font-family:微软雅黑;
+	font-size:14px;
+	color:#1992c4
+}
+
+.personInfoDetail {
+	text-align: left;
+	margin:5px 10px 5px 15px;
+}
+
+.personInfoPhone {
+	font-family:微软雅黑;
+	font-size:12px;
+	color:#9b9b9b;
+}
+
+.personInfoPhoneNum {
+	font-family:微软雅黑;
+	font-size:12px;
+	color:#494949
+}
+</style>
+</head>
+<body onmousemove="show_coords(event)">
+	
+	<div class="container">
+		<div class="ecology">
+			<div style="background: url(img/webicon.png) no-repeat;" class="bg_div"></div>
+			<span style="color: #59c7f5;" class="title">公文管理新建</span>
+			<div class="line1"></div>
+			<ul>
+				
+							<li docid="2174690" onmouseout="hideExpand(&#39;2174690&#39;)" onmousemove="isShowExpand(&#39;2174690&#39;)" title="集团内控流程新建"><div class="bg"><i class="point"></i>
+							<a href="/interface/jiangyl/jtworkflowcreate.jsp" target="_blank">1、公司收文办理（市局）</a><i id="expand_2174690" class="expand" title="资料负责人"  style="display: none;"></i></div></li>
+				
+							<li docid="1937842"  onmouseout="hideExpand(&#39;1937842&#39;)" onmousemove="isShowExpand(&#39;1937842&#39;)" title="下属单位内控流程新建"><div class="bg"><i class="point"></i><a href="/interface/jiangyl/xjgsworkflowcreate.jsp" target="_blank">2、公司拟报</a><i id="expand_1937842" class="expand" title="资料负责人" onclick="showPersonInfo(event)" style="display: none;"></i></div></li>
+				
+							<li docid="1937776"  onmouseout="hideExpand(&#39;1937776&#39;)" onmousemove="isShowExpand(&#39;1937776&#39;)" title="酒店集团内控流程新建"><div class="bg"><i class="point"></i><a href="/interface/jiangyl/jdjtworkflowcreate.jsp" target="_blank">3、信息拟报</a><i id="expand_1937776" class="expand" title="资料负责人" onclick="showPersonInfo(event)" style="display: none;"></i></div></li>
+							
+							<li docid="1937704"  onmouseout="hideExpand(&#39;1937704&#39;)" onmousemove="isShowExpand(&#39;1937704&#39;)" title="紫金山内控流程新建"><div class="bg"><i class="point"></i><a href="/interface/jiangyl/zjsjdworkflowcreate.jsp" target="_blank">4、会议通知</a><i id="expand_1937704" class="expand" title="资料负责人" onclick="showPersonInfo(event)" style="display: none;"></i></div></li>
+				
+			</ul>
+			
+			
+		</div>
+		
+						<div class="personInfoCon" id="personInfo_1937704">
+							
+								<div class="personInfoTitleDiv"><span class="personInfoTitleSpan">资料负责人：</span><span class="personInfoName">柳炉</span></div>
+								<div style="border-bottom: 1px solid #e4e4e4;width: 80%; margin: auto;"></div>
+								<div class="personInfoDetail"><span class="personInfoPhone">手机：</span><span class="personInfoPhoneNum">13818749273</span></div>
+								<div class="personInfoDetail"><span class="personInfoPhone">电话：</span><span class="personInfoPhoneNum">021-68860383-6172</span></div>
+							
+						</div>
+						
+			
+						<div class="personInfoCon" id="personInfo_1937776">
+							
+								<div class="personInfoTitleDiv"><span class="personInfoTitleSpan">资料负责人：</span><span class="personInfoName">杨国生</span></div>
+								<div style="border-bottom: 1px solid #e4e4e4;width: 80%; margin: auto;"></div>
+								<div class="personInfoDetail"><span class="personInfoPhone">手机：</span><span class="personInfoPhoneNum">18616362620</span></div>
+								<div class="personInfoDetail"><span class="personInfoPhone">电话：</span><span class="personInfoPhoneNum">021-68860398-8105</span></div>
+							
+						</div>
+						
+			
+						<div class="personInfoCon" id="personInfo_1937842">
+							
+								<div class="personInfoTitleDiv"><span class="personInfoTitleSpan">资料负责人：</span><span class="personInfoName">柳炉</span></div>
+								<div style="border-bottom: 1px solid #e4e4e4;width: 80%; margin: auto;"></div>
+								<div class="personInfoDetail"><span class="personInfoPhone">手机：</span><span class="personInfoPhoneNum">13818749273</span></div>
+								<div class="personInfoDetail"><span class="personInfoPhone">电话：</span><span class="personInfoPhoneNum">021-68860383-6172</span></div>
+							
+						</div>
+						
+			
+						<div class="personInfoCon" id="personInfo_2174690">
+							
+								<div class="personInfoTitleDiv"><span class="personInfoTitleSpan">资料负责人：</span><span class="personInfoName">柳炉</span></div>
+								<div style="border-bottom: 1px solid #e4e4e4;width: 80%; margin: auto;"></div>
+								<div class="personInfoDetail"><span class="personInfoPhone">手机：</span><span class="personInfoPhoneNum">13818749273</span></div>
+								<div class="personInfoDetail"><span class="personInfoPhone">电话：</span><span class="personInfoPhoneNum">021-68860383-6172</span></div>
+							
+						</div>
+						
+			
+		<div class="emobile">
+			<div style="background: url(&#39;img/mobile-icon.png&#39;);" class="bg_div"></div>
+			<span style="color: #31cd11;" class="title">公文查询</span>
+			<div class="line2"></div>
+			<ul>
+				
+							<li docid="1942518"  onmouseout="hideExpand(&#39;1942518&#39;)" onmousemove="isShowExpand(&#39;1942518&#39;)" title="集团内控流程查询"><div class="bg"><i class="point"></i><a href="/formmode/tree/ViewCustomTree.jsp?id=61" target="_blank">1、公司收文办理（市局）查询</a><i id="expand_1942518" class="expand" title="资料负责人" onclick="showPersonInfo(event)" style="display: none;"></i></div></li>
+				
+							<li docid="1938205"  onmouseout="hideExpand(&#39;1938205&#39;)" onmousemove="isShowExpand(&#39;1938205&#39;)" title="二级公司内控查询"><div class="bg"><i class="point"></i><a href="/formmode/tree/ViewCustomTree.jsp?id=62" target="_blank">2、公文拟报查询</a><i id="expand_1938205" class="expand" title="资料负责人" onclick="showPersonInfo(event)" style="display: none;"></i></div></li>
+				
+							<li docid="1938138"  onmouseout="hideExpand(&#39;1938138&#39;)" onmousemove="isShowExpand(&#39;1938138&#39;)" title="三级公司内控流程查询"><div class="bg"><i class="point"></i><a href="/formmode/tree/ViewCustomTree.jsp?id=63" target="_blank">3、信息拟报查询</a><i id="expand_1938138" class="expand" title="资料负责人" onclick="showPersonInfo(event)" style="display: none;"></i></div></li>
+							<li docid="1938138"  onmouseout="hideExpand(&#39;1938138&#39;)" onmousemove="isShowExpand(&#39;1938138&#39;)" title="酒店集团内控流程查询"><div class="bg"><i class="point"></i><a href="/formmode/tree/ViewCustomTree.jsp?id=101" target="_blank">4、会议通知查询</a><i id="expand_1938138" class="expand" title="资料负责人" onclick="showPersonInfo(event)" style="display: none;"></i></div></li>
+							<li docid="1938138"  onmouseout="hideExpand(&#39;1938138&#39;)" onmousemove="isShowExpand(&#39;1938138&#39;)" title="紫金山内控流程查询"><div class="bg"><i class="point"></i><a href="/formmode/tree/ViewCustomTree.jsp?id=121" target="_blank">5、督查督办查询</a><i id="expand_1938138" class="expand" title="资料负责人" onclick="showPersonInfo(event)" style="display: none;"></i></div></li>
+				
+			</ul>
+		</div>
+		
+						<div class="personInfoCon" id="personInfo_1938138">
+							
+								<div class="personInfoTitleDiv"><span class="personInfoTitleSpan">资料负责人：</span><span class="personInfoName">王宇静</span></div>
+								<div style="border-bottom: 1px solid #e4e4e4;width: 80%; margin: auto;"></div>
+								<div class="personInfoDetail"><span class="personInfoPhone">手机：</span><span class="personInfoPhoneNum">18616750306</span></div>
+								<div class="personInfoDetail"><span class="personInfoPhone">电话：</span><span class="personInfoPhoneNum">021-68860322-6472</span></div>
+							
+						</div>
+						
+			
+						<div class="personInfoCon" id="personInfo_1938205">
+							
+								<div class="personInfoTitleDiv"><span class="personInfoTitleSpan">资料负责人：</span><span class="personInfoName">王宇静</span></div>
+								<div style="border-bottom: 1px solid #e4e4e4;width: 80%; margin: auto;"></div>
+								<div class="personInfoDetail"><span class="personInfoPhone">手机：</span><span class="personInfoPhoneNum">18616750306</span></div>
+								<div class="personInfoDetail"><span class="personInfoPhone">电话：</span><span class="personInfoPhoneNum">021-68860322-6472</span></div>
+							
+						</div>
+						
+			
+						<div class="personInfoCon" id="personInfo_1942518">
+							
+								<div class="personInfoTitleDiv"><span class="personInfoTitleSpan">资料负责人：</span><span class="personInfoName">王宇静</span></div>
+								<div style="border-bottom: 1px solid #e4e4e4;width: 80%; margin: auto;"></div>
+								<div class="personInfoDetail"><span class="personInfoPhone">手机：</span><span class="personInfoPhoneNum">18616750306</span></div>
+								<div class="personInfoDetail"><span class="personInfoPhone">电话：</span><span class="personInfoPhoneNum">021-68860322-6472</span></div>
+							
+						</div>
+						
+			
+<!-- 		<div class="product">
+			<div style="background: url(&#39;img/fangan-icon.png&#39;);" class="bg_div"></div>
+			<span style="color: #7897fe;" class="title">内控流程登记簿</span>
+			<div class="line3"></div>
+			<ul>
+				
+							<li docid="1937074"  onmouseout="hideExpand(&#39;1937074&#39;)" onmousemove="isShowExpand(&#39;1937074&#39;)" title="内控流程登记簿查询"><div class="bg"><i class="point"></i><a href="/interface/jiangyl/nkreport.jsp" target="_blank">1、内控流程登记簿查询</a><i id="expand_1937074" class="expand" title="资料负责人" onclick="showPersonInfo(event)" style="display: none;"></i></div></li>
+
+				
+			</ul>
+		</div> -->
+		
+						<div class="personInfoCon" id="personInfo_1937071">
+							
+								<div class="personInfoTitleDiv"><span class="personInfoTitleSpan">资料负责人：</span><span class="personInfoName">刘超</span></div>
+								<div style="border-bottom: 1px solid #e4e4e4;width: 80%; margin: auto;"></div>
+								<div class="personInfoDetail"><span class="personInfoPhone">手机：</span><span class="personInfoPhoneNum">18621075501</span></div>
+								<div class="personInfoDetail"><span class="personInfoPhone">电话：</span><span class="personInfoPhoneNum">021-68860398-6044</span></div>
+							
+						</div>
+						
+			
+						<div class="personInfoCon" id="personInfo_1937074">
+							
+								<div class="personInfoTitleDiv"><span class="personInfoTitleSpan">资料负责人：</span><span class="personInfoName">刘超</span></div>
+								<div style="border-bottom: 1px solid #e4e4e4;width: 80%; margin: auto;"></div>
+								<div class="personInfoDetail"><span class="personInfoPhone">手机：</span><span class="personInfoPhoneNum">18621075501</span></div>
+								<div class="personInfoDetail"><span class="personInfoPhone">电话：</span><span class="personInfoPhoneNum">021-68860398-6044</span></div>
+							
+						</div>
+						
+			
+						<div class="personInfoCon" id="personInfo_1937077">
+							
+								<div class="personInfoTitleDiv"><span class="personInfoTitleSpan">资料负责人：</span><span class="personInfoName">刘超</span></div>
+								<div style="border-bottom: 1px solid #e4e4e4;width: 80%; margin: auto;"></div>
+								<div class="personInfoDetail"><span class="personInfoPhone">手机：</span><span class="personInfoPhoneNum">18621075501</span></div>
+								<div class="personInfoDetail"><span class="personInfoPhone">电话：</span><span class="personInfoPhoneNum">021-68860398-6044</span></div>
+							
+						</div>
+						
+			
+						<div class="personInfoCon" id="personInfo_1937819">
+							
+								<div class="personInfoTitleDiv"><span class="personInfoTitleSpan">资料负责人：</span><span class="personInfoName">柳炉</span></div>
+								<div style="border-bottom: 1px solid #e4e4e4;width: 80%; margin: auto;"></div>
+								<div class="personInfoDetail"><span class="personInfoPhone">手机：</span><span class="personInfoPhoneNum">13818749273</span></div>
+								<div class="personInfoDetail"><span class="personInfoPhone">电话：</span><span class="personInfoPhoneNum">021-68860383-6172</span></div>
+							
+						</div>
+						
+			
+	<!-- 	<div class="resource">
+			<div style="background: url(&#39;img/ziyuan-icon.png&#39;);" class="bg_div"></div>
+			<span style="color: #ff7f27;" class="title">内控流程统计报表</span>
+			<div class="line4"></div>
+			<ul>
+				<li  title="内控流程统计报表查询"><div class="bg"><i class="point"></i><a href="/workflow/flowReport/FlowTypeStat2.jsp" target="_blank">1、内控流程统计报表查询</a></div></li>
+		
+				
+			</ul>
+		</div> -->
+		
+						<div class="personInfoCon" id="personInfo_1937934">
+							
+								<div class="personInfoTitleDiv"><span class="personInfoTitleSpan">资料负责人：</span><span class="personInfoName">董雷</span></div>
+								<div style="border-bottom: 1px solid #e4e4e4;width: 80%; margin: auto;"></div>
+								<div class="personInfoDetail"><span class="personInfoPhone">手机：</span><span class="personInfoPhoneNum">18101871776</span></div>
+								<div class="personInfoDetail"><span class="personInfoPhone">电话：</span><span class="personInfoPhoneNum">021-68860318-2076</span></div>
+							
+						</div>
+						
+			
+						<div class="personInfoCon" id="personInfo_2197831">
+							
+								<div class="personInfoTitleDiv"><span class="personInfoTitleSpan">资料负责人：</span><span class="personInfoName">陈雄</span></div>
+								<div style="border-bottom: 1px solid #e4e4e4;width: 80%; margin: auto;"></div>
+								<div class="personInfoDetail"><span class="personInfoPhone">手机：</span><span class="personInfoPhoneNum">15618909370</span></div>
+								<div class="personInfoDetail"><span class="personInfoPhone">电话：</span><span class="personInfoPhoneNum">021-68860328-6157</span></div>
+							
+						</div>
+						
+			
+		<div style="clear: both"></div>
+	</div>
+
+</body></html>
