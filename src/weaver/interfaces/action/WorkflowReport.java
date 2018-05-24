@@ -14,7 +14,7 @@ import weaver.general.Util;
 import weaver.hrm.User;
 import weaver.hrm.resource.ResourceComInfo;
 /**
- *by yangw at 20180523
+ *by yangw at 20180523 秀爱
  *主要是修改如果type是固定资产且，人员是魏雪清和吴晓海时调用查询方法。
  */
 public class WorkflowReport extends BaseBean{
