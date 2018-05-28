@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import weaver.conn.RecordSet;
+import weaver.general.BaseBean;
 import weaver.general.Util;
 
 /**
@@ -12,7 +13,7 @@ import weaver.general.Util;
  * @author jiangyanlong
  *
  */
-public class WorkflowSign {
+public class WorkflowSign extends BaseBean{
 
 	public static Map<String, String> map = new HashMap<String, String>();
 	
@@ -27,6 +28,7 @@ public class WorkflowSign {
 				+ "from WORKFLOW_REQUESTLOG a WHERE " + "a.REQUESTID = " + requestid
 				+ " order by a.OPERATEDATE asc, a.OPERATETIME asc";
 		rs.execute(sql);
+		writeLog("WorkflowSign.sql:"+sql);
 		StringBuffer sb = new StringBuffer();
 		sb.append("<div class=\"table-responsive\">");
 		sb.append("<table class=\"table table-hover\">");
@@ -79,6 +81,7 @@ public class WorkflowSign {
 		}
 		String sql2 = "select distinct b.NODENAME,a.REQUESTID,a.USERID,c.lastname,a.ISREMARK,a.RECEIVEDATE,a.RECEIVETIME,a.OPERATEDATE,a.OPERATETIME from WORKFLOW_CURRENTOPERATOR a,WORKFLOW_NODEBASE b,hrmresource c where c.id= a.USERID and a.nodeid = b.id and a.REQUESTID = "+requestid+" and a.ISREMARK = '0' order by a.RECEIVEDATE desc , a.RECEIVETIME desc";
 		rs.execute(sql2);
+		writeLog("WorkflowSign.sql:"+sql2);
 		while (rs.next()) {
 			String nodename = Util.null2String(rs.getString("nodename"));
 			String lastname = Util.null2String(rs.getString("lastname"));
