@@ -1,32 +1,84 @@
 package weaver.interfaces.service.remind;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import com.alibaba.fastjson.JSON;
+
 import weaver.conn.RecordSet;
 import weaver.general.BaseBean;
 import weaver.general.Util;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class RemindServiceImpl extends BaseBean implements RemindService {
 
 	@Override
 	public String exists(String loginname, String type) {
+		String createdate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+		String createtime = new SimpleDateFormat("HH:mm").format(new Date());
+		String modedatacreatetime = new SimpleDateFormat("HH:mm:ss").format(new Date());
 		String loginid = Util.null2String(loginname);
+		String message="[{loginname:"+loginname+",type:"+type+"}]";
+		
+		String info="";
 		if ("".equals(loginid)) {
-			return "登录账号不能为空";
+			info="登录账号不能为空";
+			String tname="";
+			try {
+				RecordSet rs1 = new RecordSet();
+				String tableNameSQL = "select w.tablename,w.id from modeinfo m,workflow_bill w where w.id=m.formid and m.id=385";
+				rs1.execute(tableNameSQL);
+				rs1.next();
+				String tableName = Util.null2String(rs1.getString("tablename"));
+
+				String sql1 = "insert into " + tableName + " (createdate,typeName,createtime,receivemessage,returnmessage,formmodeid,"
+							+ "modedatacreater,modedatacreatertype,modedatacreatedate,modedatacreatetime) values ('" + createdate
+							+ "','"+ tname + "','" + createtime + "','" + message + "'" + ",'" + info + "','385','1','0','" + createdate
+							+ "','" + modedatacreatetime + "')";
+
+					rs1.execute(sql1);
+			} catch (Exception e) {
+				writeLog("exists异常:"+e.getMessage());
+			}
+			
+				
+			return info;
 		}
+		
 		RecordSet rs = new RecordSet();
 		String sql = "select id from hrmresource where loginid = '" + loginname + "'";
 		writeLog("根据传入参数：" + loginname + "查询人员sql：" + sql);
 		rs.execute(sql);
 		rs.next();
+		
 		String id = Util.null2String(rs.getString("id"));
+		
 		if ("".equals(id)) {
-			return "登录账号" + loginname + "在泛微OA中不存在";
+			info="登录账号" + loginname + "在泛微OA中不存在";
+			String tname="";
+			try {
+				RecordSet rs1 = new RecordSet();
+				String tableNameSQL = "select w.tablename,w.id from modeinfo m,workflow_bill w where w.id=m.formid and m.id=385";
+				rs1.execute(tableNameSQL);
+				rs1.next();
+				String tableName = Util.null2String(rs1.getString("tablename"));
+
+				String sql1 = "insert into " + tableName + " (createdate,typeName,createtime,receivemessage,returnmessage,formmodeid,"
+							+ "modedatacreater,modedatacreatertype,modedatacreatedate,modedatacreatetime) values ('" + createdate
+							+ "','"+ tname + "','" + createtime + "','" + message + "'" + ",'" + info + "','385','1','0','" + createdate
+							+ "','" + modedatacreatetime + "')";
+
+					rs1.execute(sql1);	
+			} catch (Exception e) {
+				writeLog("exists异常:"+e.getMessage());
+			}
+			
+			return info;
 		}
-		String typeid = "";
-		String typeName = "";
+		String jsonstr="";
+		String typeid ="";
+		String typeName ="";
 		if ("1".equals(type)) { // 领导批示提醒
 			typeid = "3";
 			typeName = "领导批示提醒";
@@ -37,18 +89,52 @@ public class RemindServiceImpl extends BaseBean implements RemindService {
 			for (int i = 0; i < ldremindModes.length; i++) {
 				modes[i] = ldremindModes[i];
 			}
-			String jsonstr = JSON.toJSON(modes).toString();
+		    jsonstr = JSON.toJSON(modes).toString();
+		    try {
+		    	RecordSet rs1 = new RecordSet();
+				String tableNameSQL = "select w.tablename,w.id from modeinfo m,workflow_bill w where w.id=m.formid and m.id=385";
+				rs1.execute(tableNameSQL);
+				rs1.next();
+				String tableName = Util.null2String(rs1.getString("tablename"));
+
+				String sql1 = "insert into " + tableName + " (createdate,name,typeName,createtime,receivemessage,returnmessage,formmodeid,"
+						+ "modedatacreater,modedatacreatertype,modedatacreatedate,modedatacreatetime) values ('" + createdate
+						+ "','" + id + "','"+ typeName + "','" + createtime + "','" + message + "'" + ",'" + jsonstr + "','385','1','0','" + createdate
+						+ "','" + modedatacreatetime + "')";
+
+				rs1.execute(sql1);
+			} catch (Exception e) {
+				writeLog("exists异常:"+e.getMessage());
+			}
+			
 			return jsonstr;
 		}
 		if ("2".equals(type)) { // 提醒通知单
 			// 获取提醒通知单
+			typeName = "提醒通知单";
 			RemindMode[] txremindModes = getTodoRemind(loginname);
 			int total = txremindModes.length;
 			RemindMode[] modes = new RemindMode[total];
 			for (int i = 0; i < txremindModes.length; i++) {
 				modes[i] = txremindModes[i];
 			}
-			String jsonstr = JSON.toJSON(modes).toString();
+			jsonstr = JSON.toJSON(modes).toString();
+			 try {
+			    	RecordSet rs1 = new RecordSet();
+					String tableNameSQL = "select w.tablename,w.id from modeinfo m,workflow_bill w where w.id=m.formid and m.id=385";
+					rs1.execute(tableNameSQL);
+					rs1.next();
+					String tableName = Util.null2String(rs1.getString("tablename"));
+
+					String sql1 = "insert into " + tableName + " (createdate,name,typeName,createtime,receivemessage,returnmessage,formmodeid,"
+							+ "modedatacreater,modedatacreatertype,modedatacreatedate,modedatacreatetime) values ('" + createdate
+							+ "','" + id + "','"+ typeName + "','" + createtime + "','" + message + "'" + ",'" + jsonstr + "','385','1','0','" + createdate
+							+ "','" + modedatacreatetime + "')";
+
+					rs1.execute(sql1);
+				} catch (Exception e) {
+					writeLog("exists异常:"+e.getMessage());
+				}
 			return jsonstr;
 		}
 		if ("3".equals(type)) { // 归档提醒
@@ -63,7 +149,23 @@ public class RemindServiceImpl extends BaseBean implements RemindService {
 			for (int i = 0; i < gdremindModes.length; i++) {
 				modes[i] = gdremindModes[i];
 			}
-			String jsonstr = JSON.toJSON(modes).toString();
+			jsonstr = JSON.toJSON(modes).toString();
+			 try {
+			    	RecordSet rs1 = new RecordSet();
+					String tableNameSQL = "select w.tablename,w.id from modeinfo m,workflow_bill w where w.id=m.formid and m.id=385";
+					rs1.execute(tableNameSQL);
+					rs1.next();
+					String tableName = Util.null2String(rs1.getString("tablename"));
+
+					String sql1 = "insert into " + tableName + " (createdate,name,typeName,createtime,receivemessage,returnmessage,formmodeid,"
+							+ "modedatacreater,modedatacreatertype,modedatacreatedate,modedatacreatetime) values ('" + createdate
+							+ "','" + id + "','"+ typeName + "','" + createtime + "','" + message + "'" + ",'" + jsonstr + "','385','1','0','" + createdate
+							+ "','" + modedatacreatetime + "')";
+
+					rs1.execute(sql1);
+				} catch (Exception e) {
+					writeLog("exists异常:"+e.getMessage());
+				}
 			return jsonstr;
 		}
 		if ("4".equals(type)) { // 获取催办通知单
@@ -76,17 +178,76 @@ public class RemindServiceImpl extends BaseBean implements RemindService {
 			for (int i = 0; i < dbremindModes.length; i++) {
 				modes[i] = dbremindModes[i];
 			}
-			String jsonstr = JSON.toJSON(modes).toString();
+			jsonstr = JSON.toJSON(modes).toString();
+			 try {
+			    	RecordSet rs1 = new RecordSet();
+					String tableNameSQL = "select w.tablename,w.id from modeinfo m,workflow_bill w where w.id=m.formid and m.id=385";
+					rs1.execute(tableNameSQL);
+					rs1.next();
+					String tableName = Util.null2String(rs1.getString("tablename"));
+
+					String sql1 = "insert into " + tableName + " (createdate,name,typeName,createtime,receivemessage,returnmessage,formmodeid,"
+							+ "modedatacreater,modedatacreatertype,modedatacreatedate,modedatacreatetime) values ('" + createdate
+							+ "','" + id + "','"+ typeName + "','" + createtime + "','" + message + "'" + ",'" + jsonstr + "','385','1','0','" + createdate
+							+ "','" + modedatacreatetime + "')";
+
+					rs1.execute(sql1);
+				} catch (Exception e) {
+					writeLog("exists异常:"+e.getMessage());
+				}
+			
 			return jsonstr;
 		}
-		return "";
+		
+		 try {
+		    	RecordSet rs1 = new RecordSet();
+				String tableNameSQL = "select w.tablename,w.id from modeinfo m,workflow_bill w where w.id=m.formid and m.id=385";
+				rs1.execute(tableNameSQL);
+				rs1.next();
+				typeName="无效类型";
+				String tableName = Util.null2String(rs1.getString("tablename"));
+
+				String sql1 = "insert into " + tableName + " (createdate,name,typeName,createtime,receivemessage,returnmessage,formmodeid,"
+						+ "modedatacreater,modedatacreatertype,modedatacreatedate,modedatacreatetime) values ('" + createdate
+						+ "','" + id + "','"+ typeName + "','" + createtime + "','" + message + "'" + ",'" + jsonstr + "','385','1','0','" + createdate
+						+ "','" + modedatacreatetime + "')";
+
+				rs1.execute(sql1);
+			} catch (Exception e) {
+				writeLog("exists异常:"+e.getMessage());
+			}
+		
+		return jsonstr;
 	}
 
 	@Override
 	public String remind(String loginname, String type) {
+		String createdate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+		String createtime = new SimpleDateFormat("HH:mm").format(new Date());
+		String modedatacreatetime = new SimpleDateFormat("HH:mm:ss").format(new Date());
 		String loginid = Util.null2String(loginname);
+		String message="[{loginname:"+loginname+",type:"+type+"}]";
+		String info="";
 		if ("".equals(loginid)) {
-			return "登录账号不能为空";
+			info="登录账号不能为空";
+			String tname="";
+			try {
+				RecordSet rs1 = new RecordSet();
+				String tableNameSQL = "select w.tablename,w.id from modeinfo m,workflow_bill w where w.id=m.formid and m.id=384";
+				rs1.execute(tableNameSQL);
+				rs1.next();
+				String tableName = Util.null2String(rs1.getString("tablename"));
+
+				String sql1 = "insert into " + tableName + " (createdate,typeName,createtime,receivemessage,returnmessage,formmodeid,"
+							+ "modedatacreater,modedatacreatertype,modedatacreatedate,modedatacreatetime) values ('" + createdate
+							+ "','"+ tname + "','" + createtime + "','" + message + "'" + ",'" + info + "','384','1','0','" + createdate
+							+ "','" + modedatacreatetime + "')";
+
+					rs1.execute(sql1);
+			} catch (Exception e) {
+				writeLog("remind异常:"+e.getMessage());
+			}
+			return info;
 		}
 		RecordSet rs = new RecordSet();
 		String sql = "select id from hrmresource where loginid = '" + loginname + "'";
@@ -94,11 +255,31 @@ public class RemindServiceImpl extends BaseBean implements RemindService {
 		rs.execute(sql);
 		rs.next();
 		String id = Util.null2String(rs.getString("id"));
+		
 		if ("".equals(id)) {
-			return "登录账号" + loginname + "在泛微OA中不存在";
+			info="登录账号" + loginname + "在泛微OA中不存在";
+			String tname="";
+			try {
+				RecordSet rs1 = new RecordSet();
+				String tableNameSQL = "select w.tablename,w.id from modeinfo m,workflow_bill w where w.id=m.formid and m.id=384";
+				rs1.execute(tableNameSQL);
+				rs1.next();
+				String tableName = Util.null2String(rs1.getString("tablename"));
+
+				String sql1 = "insert into " + tableName + " (createdate,typeName,createtime,receivemessage,returnmessage,formmodeid,"
+							+ "modedatacreater,modedatacreatertype,modedatacreatedate,modedatacreatetime) values ('" + createdate
+							+ "','"+ tname + "','" + createtime + "','" + message + "'" + ",'" + info + "','384','1','0','" + createdate
+							+ "','" + modedatacreatetime + "')";
+
+					rs1.execute(sql1);
+			} catch (Exception e) {
+				writeLog("remind异常:"+e.getMessage());
+			}	
+			return info;
 		}
-		String typeid = "";
-		String typeName = "";
+		String jsonstr ="";
+		String typeid ="";
+		String typeName ="";
 		if ("1".equals(type)) { // 领导批示提醒
 			typeid = "3";
 			typeName = "领导批示提醒";
@@ -110,19 +291,54 @@ public class RemindServiceImpl extends BaseBean implements RemindService {
 			for (int i = 0; i < ldremindModes.length; i++) {
 				modes[i] = ldremindModes[i];
 			}
-			String jsonstr = JSON.toJSON(modes).toString();
+			jsonstr = JSON.toJSON(modes).toString();
+			try {
+				RecordSet rs1 = new RecordSet();
+				String tableNameSQL = "select w.tablename,w.id from modeinfo m,workflow_bill w where w.id=m.formid and m.id=384";
+				rs1.execute(tableNameSQL);
+				rs1.next();
+				String tableName = Util.null2String(rs1.getString("tablename"));
+
+				String sql1 = "insert into " + tableName + " (createdate,name,typeName,createtime,receivemessage,returnmessage,formmodeid,"
+							+ "modedatacreater,modedatacreatertype,modedatacreatedate,modedatacreatetime) values ('" + createdate
+							+ "','"+ id + "','"+ typeName + "','" + createtime + "','" + message + "'" + ",'" + jsonstr + "','384','1','0','" + createdate
+							+ "','" + modedatacreatetime + "')";
+
+					rs1.execute(sql1);
+			} catch (Exception e) {
+				writeLog("remind异常:"+e.getMessage());
+			}
 			return jsonstr;
+			
 		}
 		if ("2".equals(type)) { // 提醒通知单
 			// 获取提醒通知单
+			typeName="提醒通知单";
 			RemindMode[] txremindModes = getTodoRemind(loginname);
 			int total = txremindModes.length;
 			RemindMode[] modes = new RemindMode[total];
 			for (int i = 0; i < txremindModes.length; i++) {
 				modes[i] = txremindModes[i];
 			}
-			String jsonstr = JSON.toJSON(modes).toString();
+			jsonstr = JSON.toJSON(modes).toString();
+			try {
+				RecordSet rs1 = new RecordSet();
+				String tableNameSQL = "select w.tablename,w.id from modeinfo m,workflow_bill w where w.id=m.formid and m.id=384";
+				rs1.execute(tableNameSQL);
+				rs1.next();
+				String tableName = Util.null2String(rs1.getString("tablename"));
+
+				String sql1 = "insert into " + tableName + " (createdate,name,typeName,createtime,receivemessage,returnmessage,formmodeid,"
+							+ "modedatacreater,modedatacreatertype,modedatacreatedate,modedatacreatetime) values ('" + createdate
+							+ "','"+ id + "','"+ typeName + "','" + createtime + "','" + message + "'" + ",'" + jsonstr + "','384','1','0','" + createdate
+							+ "','" + modedatacreatetime + "')";
+
+					rs1.execute(sql1);
+			} catch (Exception e) {
+				writeLog("remind异常:"+e.getMessage());
+			}
 			return jsonstr;
+			
 		}
 		if ("3".equals(type)) { // 归档提醒
 			// 获取流程归档提醒
@@ -136,8 +352,25 @@ public class RemindServiceImpl extends BaseBean implements RemindService {
 			for (int i = 0; i < gdremindModes.length; i++) {
 				modes[i] = gdremindModes[i];
 			}
-			String jsonstr = JSON.toJSON(modes).toString();
+			jsonstr = JSON.toJSON(modes).toString();
+			try {
+				RecordSet rs1 = new RecordSet();
+				String tableNameSQL = "select w.tablename,w.id from modeinfo m,workflow_bill w where w.id=m.formid and m.id=384";
+				rs1.execute(tableNameSQL);
+				rs1.next();
+				String tableName = Util.null2String(rs1.getString("tablename"));
+
+				String sql1 = "insert into " + tableName + " (createdate,name,typeName,createtime,receivemessage,returnmessage,formmodeid,"
+							+ "modedatacreater,modedatacreatertype,modedatacreatedate,modedatacreatetime) values ('" + createdate
+							+ "','"+ id + "','"+ typeName + "','" + createtime + "','" + message + "'" + ",'" + jsonstr + "','384','1','0','" + createdate
+							+ "','" + modedatacreatetime + "')";
+
+					rs1.execute(sql1);
+			} catch (Exception e) {
+				writeLog("remind异常:"+e.getMessage());
+			}
 			return jsonstr;
+			
 		}
 		if ("4".equals(type)) { // 获取催办通知单
 			// 获取催办通知单
@@ -149,10 +382,43 @@ public class RemindServiceImpl extends BaseBean implements RemindService {
 			for (int i = 0; i < dbremindModes.length; i++) {
 				modes[i] = dbremindModes[i];
 			}
-			String jsonstr = JSON.toJSON(modes).toString();
+			jsonstr = JSON.toJSON(modes).toString();
+			try {
+				RecordSet rs1 = new RecordSet();
+				String tableNameSQL = "select w.tablename,w.id from modeinfo m,workflow_bill w where w.id=m.formid and m.id=384";
+				rs1.execute(tableNameSQL);
+				rs1.next();
+				String tableName = Util.null2String(rs1.getString("tablename"));
+
+				String sql1 = "insert into " + tableName + " (createdate,name,typeName,createtime,receivemessage,returnmessage,formmodeid,"
+							+ "modedatacreater,modedatacreatertype,modedatacreatedate,modedatacreatetime) values ('" + createdate
+							+ "','"+ id + "','"+ typeName + "','" + createtime + "','" + message + "'" + ",'" + jsonstr + "','384','1','0','" + createdate
+							+ "','" + modedatacreatetime + "')";
+
+					rs1.execute(sql1);
+			} catch (Exception e) {
+				writeLog("remind异常:"+e.getMessage());
+			}
 			return jsonstr;
 		}
-		return "";
+		try {
+			RecordSet rs1 = new RecordSet();
+			String tableNameSQL = "select w.tablename,w.id from modeinfo m,workflow_bill w where w.id=m.formid and m.id=384";
+			rs1.execute(tableNameSQL);
+			rs1.next();
+			typeName="无效类型";
+			String tableName = Util.null2String(rs1.getString("tablename"));
+
+			String sql1 = "insert into " + tableName + " (createdate,typeName,createtime,receivemessage,returnmessage,formmodeid,"
+						+ "modedatacreater,modedatacreatertype,modedatacreatedate,modedatacreatetime) values ('" + createdate
+						+ "','"+ typeName + "','" + createtime + "','" + message + "'" + ",'" + jsonstr + "','384','1','0','" + createdate
+						+ "','" + modedatacreatetime + "')";
+
+				rs1.execute(sql1);
+		} catch (Exception e) {
+			writeLog("remind异常:"+e.getMessage());
+		}
+		return jsonstr;
 	}
 
 	private RemindMode[] getTodoRemind(String loginname) {

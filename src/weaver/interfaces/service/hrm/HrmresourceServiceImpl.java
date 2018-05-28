@@ -1,17 +1,20 @@
 package weaver.interfaces.service.hrm;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import weaver.conn.RecordSet;
-import weaver.general.Util;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+
 import java.util.List;
 
-public class HrmresourceServiceImpl implements HrmresourceService {
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+
+import weaver.conn.RecordSet;
+import weaver.general.Util;
+import weaver.general.BaseBean;
+
+public class HrmresourceServiceImpl extends BaseBean implements HrmresourceService {
 
 	@Override
 	public String getHrmID(String hrmLoginIDS) {
@@ -22,7 +25,6 @@ public class HrmresourceServiceImpl implements HrmresourceService {
 		// 接收参数 hrmLoginIDS
 		List<HrmInfo> list = new ArrayList<HrmInfo>();
 		JSONArray arrs = JSON.parseArray(hrmLoginIDS);
-		// [{},{}]
 		for (int i = 0; i < arrs.size(); i++) {
 			JSONObject arr = (JSONObject) arrs.get(i);
 			String loginname = (String) arr.get("loginname");
@@ -37,18 +39,28 @@ public class HrmresourceServiceImpl implements HrmresourceService {
 			}
 		}
 		String jsonstr = JSON.toJSON(list).toString();
+		try {
+			RecordSet rs1 = new RecordSet();
+			String tableNameSQL = "select w.tablename,w.id from modeinfo m,workflow_bill w where w.id=m.formid and m.id=381";
+			rs1.execute(tableNameSQL);
+			rs1.next();
+			String tableName = Util.null2String(rs1.getString("tablename"));
 
-		String tableNameSQL = "select w.tablename,w.id from modeinfo m,workflow_bill w where w.id=m.formid and m.id=381";
-		rs.execute(tableNameSQL);
-		rs.next();
-		String tableName = Util.null2String(rs.getString("tablename"));
+			String sql = "insert into " + tableName + " (createdate,createtime,receivemessage,returnmessage,formmodeid,"
+					+ "modedatacreater,modedatacreatertype,modedatacreatedate,modedatacreatetime) values ('" + createdate
+					+ "','" + createtime + "','" + hrmLoginIDS + "'" + ",'" + jsonstr + "','381','1','0','" + createdate
+					+ "','" + modedatacreatetime + "')";
 
-		String sql = "insert into " + tableName + " (createdate,createtime,receivemessage,returnmessage,formmodeid,"
-				+ "modedatacreater,modedatacreatertype,modedatacreatedate,modedatacreatetime) values ('" + createdate
-				+ "','" + createtime + "','" + hrmLoginIDS + "'" + ",'" + jsonstr + "','381','1','0','" + createdate
-				+ "','" + modedatacreatetime + "')";
-
-		rs.execute(sql);
+			rs1.execute(sql);
+			
+		} catch (Exception e) {
+			writeLog("getHrmID异常:"+e.getMessage());
+		}
 		return jsonstr;
+		
 	}
+
+	
+	
+	
 }

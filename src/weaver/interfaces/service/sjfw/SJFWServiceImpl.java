@@ -1,6 +1,8 @@
 package weaver.interfaces.service.sjfw;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.alibaba.fastjson.JSON;
@@ -11,26 +13,64 @@ import weaver.general.Util;
 
 public class SJFWServiceImpl extends BaseBean implements SJFWService {
 
+	//查询市局发文固定数量数据
 	@Override
 	public String sjfw(int num, String loginname) {
+		String createdate1 = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+		String createtime = new SimpleDateFormat("HH:mm").format(new Date());
+		String modedatacreatetime = new SimpleDateFormat("HH:mm:ss").format(new Date());
 		String IP = getPropValue("SYSIP", "SYSIP");
+		String message="[{num:"+num+",loginname:"+loginname+"}]";
 		RecordSet rs = new RecordSet();
+		String sql = "select id from hrmresource where loginid = '" + loginname + "'";
+		rs.execute(sql);
+		rs.next();
+		String id = Util.null2String(rs.getString("id"));
 		List<SJFWMode> list = new ArrayList<SJFWMode>();
 		if (num < 0) {
 			SJFWModes mode1 = new SJFWModes();
 			mode1.setSjfwdata(list);
 			String jsonstr = JSON.toJSON(mode1).toString();
 			writeLog("传入参数num为：" + num + " 应该为正整数");
+			try {
+				RecordSet rs1=new RecordSet();
+				String tableNameSQL = "select w.tablename,w.id from modeinfo m,workflow_bill w where w.id=m.formid and m.id=386";
+				rs1.execute(tableNameSQL);
+				rs1.next();
+				String tableName = Util.null2String(rs1.getString("tablename"));
+
+				String sql1 = "insert into " + tableName + " (createdate,createtime,name,num,receivemessage,returnmessage,formmodeid,"
+						+ "modedatacreater,modedatacreatertype,modedatacreatedate,modedatacreatetime) values ('" + createdate1
+						+ "','" + createtime + "','" + id + "','" + num + "'"  + ",'"+ message + "'" + ",'" + jsonstr + "','386','1','0','" + createdate1
+						+ "','" + modedatacreatetime + "')";
+
+				rs1.execute(sql1);
+			} catch (Exception e) {
+				writeLog("sjfw异常:"+e.getMessage());
+			}
 			return jsonstr;
 		}
-		String sql = "select id from hrmresource where loginid = '" + loginname + "'";
-		rs.execute(sql);
-		rs.next();
-		String id = Util.null2String(rs.getString("id"));
+		
 		if ("".equals(id)) {
 			SJFWModes mode1 = new SJFWModes();
 			mode1.setSjfwdata(list);
 			String jsonstr = JSON.toJSON(mode1).toString();
+			try {
+				RecordSet rs1=new RecordSet();
+				String tableNameSQL = "select w.tablename,w.id from modeinfo m,workflow_bill w where w.id=m.formid and m.id=386";
+				rs1.execute(tableNameSQL);
+				rs1.next();
+				String tableName = Util.null2String(rs1.getString("tablename"));
+
+				String sql1 = "insert into " + tableName + " (createdate,createtime,name,num,receivemessage,returnmessage,formmodeid,"
+						+ "modedatacreater,modedatacreatertype,modedatacreatedate,modedatacreatetime) values ('" + createdate1
+						+ "','" + createtime + "','" + id + "','" + num + "'"  + ",'"+ message + "'" + ",'" + jsonstr + "','386','1','0','" + createdate1
+						+ "','" + modedatacreatetime + "')";
+
+				rs1.execute(sql1);
+			} catch (Exception e) {
+				writeLog("sjfw异常:"+e.getMessage());
+			}
 			return jsonstr;
 		}
 		SJFWModes mode = new SJFWModes();
@@ -63,14 +103,40 @@ public class SJFWServiceImpl extends BaseBean implements SJFWService {
 		mode.setSjfwdata(list);
 		String jsonstr = JSON.toJSON(mode).toString();
 		writeLog("传入num：" + num + " 返回数据：" + jsonstr);
+		try {
+			RecordSet rs1=new RecordSet();
+			String tableNameSQL = "select w.tablename,w.id from modeinfo m,workflow_bill w where w.id=m.formid and m.id=386";
+			rs1.execute(tableNameSQL);
+			rs1.next();
+			String tableName = Util.null2String(rs1.getString("tablename"));
+
+			String sql1 = "insert into " + tableName + " (createdate,createtime,name,num,receivemessage,returnmessage,formmodeid,"
+					+ "modedatacreater,modedatacreatertype,modedatacreatedate,modedatacreatetime) values ('" + createdate1
+					+ "','" + createtime + "','" + id + "','" + num + "'"  + ",'"+ message + "'" + ",'" + jsonstr + "','386','1','0','" + createdate1
+					+ "','" + modedatacreatetime + "')";
+
+			rs1.execute(sql1);
+		} catch (Exception e) {
+			writeLog("sjfw异常:"+e.getMessage());
+		}
 		return jsonstr;
 	}
 
 	@Override
 	public String sfjwMore(int page, int limit, String handle, String type, String name, String startDate,
 			String endDate, String loginname) {
+		String createdate1 = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+		String createtime = new SimpleDateFormat("HH:mm").format(new Date());
+		String modedatacreatetime = new SimpleDateFormat("HH:mm:ss").format(new Date());
 		String IP = getPropValue("SYSIP", "SYSIP");
+		String message="[{page:"+page+",limit:"+limit+",handle:"+handle+",type:"+type+",name:"+name+",startDate:"+startDate+",endDate:"+endDate+",loginname:"+loginname+"}]";
 		SJFWMoreModes modes = new SJFWMoreModes();
+		RecordSet rs = new RecordSet();
+		String sql = "select id from hrmresource where loginid = '" + loginname + "'";
+		rs.execute(sql);
+		rs.next();
+		String id = Util.null2String(rs.getString("id"));
+		
 		if(!"get".equals(handle)) {
 			modes.setCount("0");
 			modes.setMsg("传入参数handle不是get");
@@ -78,6 +144,23 @@ public class SJFWServiceImpl extends BaseBean implements SJFWService {
 			writeLog("条件：[page:" + page + ",limit:" + limit + ",handle:" + handle + ",type:" + type + ",name:" + name
 					+ ",startDate:" + startDate + ",endDate:" + endDate + ",loginname:" + loginname + "] 返回结果："
 					+ jsonstr);
+			try {
+				RecordSet rs1=new RecordSet();
+				String tableNameSQL = "select w.tablename,w.id from modeinfo m,workflow_bill w where w.id=m.formid and m.id=387";
+				rs1.execute(tableNameSQL);
+				rs1.next();
+				String tableName = Util.null2String(rs1.getString("tablename"));
+
+				String sql1 = "insert into " + tableName + " (createdate,createtime,handle,type,name,receivemessage,formmodeid,"
+						+ "modedatacreater,modedatacreatertype,modedatacreatedate,modedatacreatetime) values ('" + createdate1
+						+ "','" + createtime + "','" + handle + "'" + ",'" + type + "'" + ",'"  + id + "'" + ",'"+message+"','387','1','0','" + createdate1
+						+ "','" + modedatacreatetime + "')";
+
+				rs1.execute(sql1);
+			} catch (Exception e) {
+				writeLog("sfjwMore异常:"+e.getMessage());
+			}
+			
 			return jsonstr;
 		}
 		if(!"市局发文".equals(type)) {
@@ -87,6 +170,22 @@ public class SJFWServiceImpl extends BaseBean implements SJFWService {
 			writeLog("条件：[page:" + page + ",limit:" + limit + ",handle:" + handle + ",type:" + type + ",name:" + name
 					+ ",startDate:" + startDate + ",endDate:" + endDate + ",loginname:" + loginname + "] 返回结果："
 					+ jsonstr);
+			try {
+				RecordSet rs1=new RecordSet();
+				String tableNameSQL = "select w.tablename,w.id from modeinfo m,workflow_bill w where w.id=m.formid and m.id=387";
+				rs1.execute(tableNameSQL);
+				rs1.next();
+				String tableName = Util.null2String(rs1.getString("tablename"));
+
+				String sql1 = "insert into " + tableName + " (createdate,createtime,handle,type,name,receivemessage,formmodeid,"
+						+ "modedatacreater,modedatacreatertype,modedatacreatedate,modedatacreatetime) values ('" + createdate1
+						+ "','" + createtime + "','" + handle + "'" + ",'" + type + "'" + ",'"  + id + "'" + ",'"+message+"','387','1','0','" + createdate1
+						+ "','" + modedatacreatetime + "')";
+
+				rs1.execute(sql1);
+			} catch (Exception e) {
+				writeLog("sfjwMore异常:"+e.getMessage());
+			}
 			return jsonstr;
 		}
 		if ("".equals(Util.null2String(loginname))) {
@@ -96,13 +195,25 @@ public class SJFWServiceImpl extends BaseBean implements SJFWService {
 			writeLog("条件：[page:" + page + ",limit:" + limit + ",handle:" + handle + ",type:" + type + ",name:" + name
 					+ ",startDate:" + startDate + ",endDate:" + endDate + ",loginname:" + loginname + "] 返回结果："
 					+ jsonstr);
+			try {
+				RecordSet rs1=new RecordSet();
+				String tableNameSQL = "select w.tablename,w.id from modeinfo m,workflow_bill w where w.id=m.formid and m.id=387";
+				rs1.execute(tableNameSQL);
+				rs1.next();
+				String tableName = Util.null2String(rs1.getString("tablename"));
+
+				String sql1 = "insert into " + tableName + " (createdate,createtime,handle,type,name,receivemessage,formmodeid,"
+						+ "modedatacreater,modedatacreatertype,modedatacreatedate,modedatacreatetime) values ('" + createdate1
+						+ "','" + createtime + "','" + handle + "'" + ",'" + type + "'" + ",'"  + id + "'" + ",'"+message+"','387','1','0','" + createdate1
+						+ "','" + modedatacreatetime + "')";
+
+				rs1.execute(sql1);
+			} catch (Exception e) {
+				writeLog("sfjwMore异常:"+e.getMessage());
+			}
 			return jsonstr;
 		}
-		RecordSet rs = new RecordSet();
-		String sql = "select id from hrmresource where loginid = '" + loginname + "'";
-		rs.execute(sql);
-		rs.next();
-		String id = Util.null2String(rs.getString("id"));
+		
 		if ("".equals(id)) {
 			modes.setCount("0");
 			modes.setMsg("登录账号在范围OA中不存在");
@@ -110,6 +221,22 @@ public class SJFWServiceImpl extends BaseBean implements SJFWService {
 			writeLog("条件：[page:" + page + ",limit:" + limit + ",handle:" + handle + ",type:" + type + ",name:" + name
 					+ ",startDate:" + startDate + ",endDate:" + endDate + ",loginname:" + loginname + "] 返回结果："
 					+ jsonstr);
+			try {
+				RecordSet rs1=new RecordSet();
+				String tableNameSQL = "select w.tablename,w.id from modeinfo m,workflow_bill w where w.id=m.formid and m.id=387";
+				rs1.execute(tableNameSQL);
+				rs1.next();
+				String tableName = Util.null2String(rs1.getString("tablename"));
+
+				String sql1 = "insert into " + tableName + " (createdate,createtime,handle,type,name,receivemessage,formmodeid,"
+						+ "modedatacreater,modedatacreatertype,modedatacreatedate,modedatacreatetime) values ('" + createdate1
+						+ "','" + createtime + "','" + handle + "'" + ",'" + type + "'" + ",'"  + id + "'" + ",'"+message+"','387','1','0','" + createdate1
+						+ "','" + modedatacreatetime + "')";
+
+				rs1.execute(sql1);
+			} catch (Exception e) {
+				writeLog("sfjwMore异常:"+e.getMessage());
+			}
 			return jsonstr;
 		}
 
@@ -171,6 +298,22 @@ public class SJFWServiceImpl extends BaseBean implements SJFWService {
 		String jsonstr = JSON.toJSON(modes).toString();
 		writeLog("条件：[page:" + page + ",limit:" + limit + ",handle:" + handle + ",type:" + type + ",name:" + name
 				+ ",startDate:" + startDate + ",endDate:" + endDate + ",loginname:" + loginname + "] 返回结果：" + jsonstr);
+		try {
+			RecordSet rs1=new RecordSet();
+			String tableNameSQL = "select w.tablename,w.id from modeinfo m,workflow_bill w where w.id=m.formid and m.id=387";
+			rs1.execute(tableNameSQL);
+			rs1.next();
+			String tableName = Util.null2String(rs1.getString("tablename"));
+
+			String sql1 = "insert into " + tableName + " (createdate,createtime,handle,type,name,count,receivemessage,formmodeid,"
+					+ "modedatacreater,modedatacreatertype,modedatacreatedate,modedatacreatetime) values ('" + createdate1
+					+ "','" + createtime + "','" + handle + "'" + ",'" + type + "'" + ",'"  + id + "'" + ",'"+ count + "'" + ",'"+message+"','387','1','0','" + createdate1
+					+ "','" + modedatacreatetime + "')";
+
+			rs1.execute(sql1);
+		} catch (Exception e) {
+			writeLog("sfjwMore异常:"+e.getMessage());
+		}
 		return jsonstr;
 	}
 

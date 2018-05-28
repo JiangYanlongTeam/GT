@@ -1,38 +1,105 @@
 package weaver.interfaces.service.workflow;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+
 import weaver.conn.RecordSet;
 import weaver.general.BaseBean;
 import weaver.general.Util;
 import weaver.hrm.resource.ResourceComInfo;
 import weaver.interfaces.service.weixin.WXRemindServiceImpl;
-import weaver.workflow.webservices.*;
-
-import java.util.ArrayList;
-import java.util.List;
+import weaver.workflow.webservices.WorkflowBaseInfo;
+import weaver.workflow.webservices.WorkflowMainTableInfo;
+import weaver.workflow.webservices.WorkflowRequestInfo;
+import weaver.workflow.webservices.WorkflowRequestTableField;
+import weaver.workflow.webservices.WorkflowRequestTableRecord;
+import weaver.workflow.webservices.WorkflowService;
+import weaver.workflow.webservices.WorkflowServiceImpl;
 
 public class TodoWorkflowServiceImpl extends BaseBean implements TodoWorkflowService {
 
 	@Override
 	public String todoWorkflowCount(String loginname) {
+		String createdate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+		String createtime = new SimpleDateFormat("HH:mm").format(new Date());
+		String modedatacreatetime = new SimpleDateFormat("HH:mm:ss").format(new Date());
 		String loginid = Util.null2String(loginname);
+		String info="";
 		if ("".equals(loginid)) {
-			return "登录账号不能为空";
+			info="登录账号不能为空";
+			try {
+				RecordSet rs1 = new RecordSet();
+				String tableNameSQL = "select w.tablename,w.id from modeinfo m,workflow_bill w where w.id=m.formid and m.id=388";
+				rs1.execute(tableNameSQL);
+				rs1.next();
+				String tableName = Util.null2String(rs1.getString("tablename"));
+
+				String sql1 = "insert into " + tableName + " (createdate,createtime,receivemessage,returnmessage,formmodeid,"
+						+ "modedatacreater,modedatacreatertype,modedatacreatedate,modedatacreatetime) values ('" + createdate
+						+ "','" + createtime + "','"+ loginname + "'" + ",'" + info + "','388','1','0','" + createdate
+						+ "','" + modedatacreatetime + "')";
+
+				rs1.execute(sql1);
+			} catch (Exception e) {
+				writeLog("todoWorkflowCount异常:"+e.getMessage());
+			}
+			
+			return info;
 		}
 		RecordSet rs = new RecordSet();
 		String sql = "select id from hrmresource where loginid = '" + loginname + "'";
 		rs.execute(sql);
 		rs.next();
 		String id = Util.null2String(rs.getString("id"));
+		
 		if ("".equals(id)) {
-			return "登录账号" + loginname + "在泛微OA中不存在";
+			info="登录账号" + loginname + "在泛微OA中不存在";
+			try {
+				RecordSet rs1 = new RecordSet();
+				String tableNameSQL = "select w.tablename,w.id from modeinfo m,workflow_bill w where w.id=m.formid and m.id=388";
+				rs1.execute(tableNameSQL);
+				rs1.next();
+				String tableName = Util.null2String(rs1.getString("tablename"));
+
+				String sql1 = "insert into " + tableName + " (createdate,createtime,receivemessage,returnmessage,formmodeid,"
+						+ "modedatacreater,modedatacreatertype,modedatacreatedate,modedatacreatetime) values ('" + createdate
+						+ "','" + createtime + "','"+ loginname + "'" + ",'" + info + "','388','1','0','" + createdate
+						+ "','" + modedatacreatetime + "')";
+
+				rs1.execute(sql1);
+			} catch (Exception e) {
+				writeLog("todoWorkflowCount异常:"+e.getMessage());
+			}
+			return info;
+			
 		}
 		WorkflowService WorkflowServicePortTypeProxy = new WorkflowServiceImpl();
 		String[] conditions = new String[1];
 		conditions[0] = " t1.workflowid not in (104, 1, 101,204) ";
 		int count = WorkflowServicePortTypeProxy.getToDoWorkflowRequestCount(Integer.parseInt(id), conditions);
+		try {
+			RecordSet rs1 = new RecordSet();
+			String tableNameSQL = "select w.tablename,w.id from modeinfo m,workflow_bill w where w.id=m.formid and m.id=388";
+			rs1.execute(tableNameSQL);
+			rs1.next();
+			String tableName = Util.null2String(rs1.getString("tablename"));
+
+			String sql1 = "insert into " + tableName + " (createdate,createtime,name,receivemessage,returnmessage,formmodeid,"
+					+ "modedatacreater,modedatacreatertype,modedatacreatedate,modedatacreatetime) values ('" + createdate
+					+ "','" + createtime + "','" + id + "'" + ",'"+ loginname + "'" + ",'" + count + "','388','1','0','" + createdate
+					+ "','" + modedatacreatetime + "')";
+
+			rs1.execute(sql1);
+		} catch (Exception e) {
+			writeLog("todoWorkflowCount异常"+e.getMessage());
+		}
+		
 		return Util.null2String(count);
 	}
 
@@ -61,12 +128,33 @@ public class TodoWorkflowServiceImpl extends BaseBean implements TodoWorkflowSer
 
 	@Override
 	public String todoWorkflowList(int page, int limit, String loginname, String wname, String reqid, String reqname) {
+		String createdate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+		String createtime = new SimpleDateFormat("HH:mm").format(new Date());
+		String modedatacreatetime = new SimpleDateFormat("HH:mm:ss").format(new Date());
 		String IP = getPropValue("SYSIP", "SYSIP");
+		String receivemessage="[{page:"+page+",limit:"+limit+",loginname:"+loginname+",wname:"+wname+",reqid"+reqid+",reqname:"+reqname+"}]";
 		TodoWorkflowModes modes = new TodoWorkflowModes();
 		if ("".equals(Util.null2String(loginname))) {
 			modes.setCount("0");
 			modes.setMsg("登录账号不能为空");
 			String jsonstr = JSON.toJSON(modes).toString();
+			try {
+				RecordSet rs1=new RecordSet();
+				String tableNameSQL = "select w.tablename,w.id from modeinfo m,workflow_bill w where w.id=m.formid and m.id=389";
+				rs1.execute(tableNameSQL);
+				rs1.next();
+				String tableName = Util.null2String(rs1.getString("tablename"));
+
+				String sql1 = "insert into " + tableName + " (createdate,createtime,receivemessage,formmodeid,"
+						+ "modedatacreater,modedatacreatertype,modedatacreatedate,modedatacreatetime) values ('" + createdate
+						+ "','" + createtime + "','" +  receivemessage + "','389','1','0','" + createdate
+						+ "','" + modedatacreatetime + "')";
+
+				rs1.execute(sql1);
+			} catch (Exception e) {
+				writeLog("todoWorkflowList异常:"+e.getMessage());
+			}
+			
 			return jsonstr;
 		}
 		RecordSet rs = new RecordSet();
@@ -74,10 +162,27 @@ public class TodoWorkflowServiceImpl extends BaseBean implements TodoWorkflowSer
 		rs.execute(sql);
 		rs.next();
 		String id = Util.null2String(rs.getString("id"));
+		
 		if ("".equals(id)) {
 			modes.setCount("0");
 			modes.setMsg("登录账号在泛微OA中不存在");
 			String jsonstr = JSON.toJSON(modes).toString();
+			try {
+				RecordSet rs1=new RecordSet();
+				String tableNameSQL = "select w.tablename,w.id from modeinfo m,workflow_bill w where w.id=m.formid and m.id=389";
+				rs1.execute(tableNameSQL);
+				rs1.next();
+				String tableName = Util.null2String(rs1.getString("tablename"));
+
+				String sql1 = "insert into " + tableName + " (createdate,createtime,receivemessage,formmodeid,"
+						+ "modedatacreater,modedatacreatertype,modedatacreatedate,modedatacreatetime) values ('" + createdate
+						+ "','" + createtime + "','" +  receivemessage + "','389','1','0','" + createdate
+						+ "','" + modedatacreatetime + "')";
+
+				rs1.execute(sql1);
+			} catch (Exception e) {
+				writeLog("todoWorkflowList异常:"+e.getMessage());
+			}
 			return jsonstr;
 		}
 		String wfId = "";
@@ -90,6 +195,22 @@ public class TodoWorkflowServiceImpl extends BaseBean implements TodoWorkflowSer
 				modes.setCount("0");
 				modes.setMsg("wname:" + wname + " 在泛微OA中不存在");
 				String jsonstr = JSON.toJSON(modes).toString();
+				try {
+					RecordSet rs1=new RecordSet();
+					String tableNameSQL = "select w.tablename,w.id from modeinfo m,workflow_bill w where w.id=m.formid and m.id=389";
+					rs1.execute(tableNameSQL);
+					rs1.next();
+					String tableName = Util.null2String(rs1.getString("tablename"));
+
+					String sql1 = "insert into " + tableName + " (createdate,createtime,receivemessage,formmodeid,"
+							+ "modedatacreater,modedatacreatertype,modedatacreatedate,modedatacreatetime) values ('" + createdate
+							+ "','" + createtime + "','" +  receivemessage + "','389','1','0','" + createdate
+							+ "','" + modedatacreatetime + "')";
+
+					rs1.execute(sql1);
+				} catch (Exception e) {
+					writeLog("todoWorkflowList异常:"+e.getMessage());
+				}
 				return jsonstr;
 			}
 		}
@@ -133,14 +254,50 @@ public class TodoWorkflowServiceImpl extends BaseBean implements TodoWorkflowSer
 		modes.setData(list);
 		modes.setMsg("");
 		String jsonstr = JSON.toJSON(modes).toString();
+		try {
+			RecordSet rs1=new RecordSet();
+			String tableNameSQL = "select w.tablename,w.id from modeinfo m,workflow_bill w where w.id=m.formid and m.id=389";
+			rs1.execute(tableNameSQL);
+			rs1.next();
+			String tableName = Util.null2String(rs1.getString("tablename"));
+
+			String sql1 = "insert into " + tableName + " (createdate,createtime,receivemessage,formmodeid,"
+					+ "modedatacreater,modedatacreatertype,modedatacreatedate,modedatacreatetime) values ('" + createdate
+					+ "','" + createtime + "','" +  receivemessage + "','389','1','0','" + createdate
+					+ "','" + modedatacreatetime + "')";
+
+			rs1.execute(sql1);
+		} catch (Exception e) {
+			writeLog("todoWorkflowList异常:"+e.getMessage());
+		}
 		return jsonstr;
 	}
 
 	@Override
 	public String todoWorkflowTypeList(String loginname) {
+		String createdate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+		String createtime = new SimpleDateFormat("HH:mm").format(new Date());
+		String modedatacreatetime = new SimpleDateFormat("HH:mm:ss").format(new Date());
 		if ("".equals(Util.null2String(loginname))) {
 			TodoWorkflowTypeMode[] modes = new TodoWorkflowTypeMode[0];
 			String jsonstr = JSON.toJSON(modes).toString();
+			try {
+				RecordSet rs1=new RecordSet();
+				String tableNameSQL = "select w.tablename,w.id from modeinfo m,workflow_bill w where w.id=m.formid and m.id=390";
+				rs1.execute(tableNameSQL);
+				rs1.next();
+				String tableName = Util.null2String(rs1.getString("tablename"));
+
+				String sql1 = "insert into " + tableName + " (createdate,createtime,receivemessage,returnmessage,formmodeid,"
+						+ "modedatacreater,modedatacreatertype,modedatacreatedate,modedatacreatetime) values ('" + createdate
+						+ "','" + createtime + "','" +  loginname + "','" + jsonstr + "','390','1','0','" + createdate
+						+ "','" + modedatacreatetime + "')";
+
+				rs1.execute(sql1);
+			} catch (Exception e) {
+				writeLog("todoWorkflowTypeList异常:"+e.getMessage());
+			}
+			
 			return jsonstr;
 		}
 		RecordSet rs = new RecordSet();
@@ -151,6 +308,22 @@ public class TodoWorkflowServiceImpl extends BaseBean implements TodoWorkflowSer
 		if ("".equals(id)) {
 			TodoWorkflowTypeMode[] modes = new TodoWorkflowTypeMode[0];
 			String jsonstr = JSON.toJSON(modes).toString();
+			try {
+				RecordSet rs1=new RecordSet();
+				String tableNameSQL = "select w.tablename,w.id from modeinfo m,workflow_bill w where w.id=m.formid and m.id=390";
+				rs1.execute(tableNameSQL);
+				rs1.next();
+				String tableName = Util.null2String(rs1.getString("tablename"));
+
+				String sql1 = "insert into " + tableName + " (createdate,createtime,receivemessage,returnmessage,formmodeid,"
+						+ "modedatacreater,modedatacreatertype,modedatacreatedate,modedatacreatetime) values ('" + createdate
+						+ "','" + createtime + "','" +  loginname + "','" + jsonstr + "','390','1','0','" + createdate
+						+ "','" + modedatacreatetime + "')";
+
+				rs1.execute(sql1);
+			} catch (Exception e) {
+				writeLog("todoWorkflowTypeList异常:"+e.getMessage());
+			}
 			return jsonstr;
 		}
 		String searchsql = "select distinct count(t1.requestid) requestcount,t1.workflowid,(select workflowname from workflow_base where id = t1.workflowid) workflowname "
@@ -173,11 +346,31 @@ public class TodoWorkflowServiceImpl extends BaseBean implements TodoWorkflowSer
 			c++;
 		}
 		String jsonstr = JSON.toJSON(modes).toString();
+		try {
+			RecordSet rs1=new RecordSet();
+			String tableNameSQL = "select w.tablename,w.id from modeinfo m,workflow_bill w where w.id=m.formid and m.id=390";
+			rs1.execute(tableNameSQL);
+			rs1.next();
+			String tableName = Util.null2String(rs1.getString("tablename"));
+
+			String sql1 = "insert into " + tableName + " (createdate,createtime,name,count,receivemessage,returnmessage,formmodeid,"
+					+ "modedatacreater,modedatacreatertype,modedatacreatedate,modedatacreatetime) values ('" + createdate
+					+ "','" + createtime + "','" +  id + "','" +  count + "','" +  loginname + "','" + jsonstr + "','390','1','0','" + createdate
+					+ "','" + modedatacreatetime + "')";
+
+			rs1.execute(sql1);
+		} catch (Exception e) {
+			writeLog("todoWorkflowTypeList异常:"+e.getMessage());
+		}
+		
 		return jsonstr;
 	}
 
 	@Override
 	public String workflowTypeList() {
+		String createdate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+		String createtime = new SimpleDateFormat("HH:mm").format(new Date());
+		String modedatacreatetime = new SimpleDateFormat("HH:mm:ss").format(new Date());
 		RecordSet rs = new RecordSet();
 		// String sql = "select id,workflowname from workflow_base where isvalid = 1";
 		String sql = "select id,workflowname from workflow_base w where isvalid = 1 and not exists(select 1 from workflow_subwfset f where w.id=f.subworkflowid ) and id not in (104,1,101)";
@@ -195,12 +388,33 @@ public class TodoWorkflowServiceImpl extends BaseBean implements TodoWorkflowSer
 			c++;
 		}
 		String jsonstr = JSON.toJSON(modes).toString();
+		try {
+			RecordSet rs1=new RecordSet();
+			String tableNameSQL = "select w.tablename,w.id from modeinfo m,workflow_bill w where w.id=m.formid and m.id=391";
+			rs1.execute(tableNameSQL);
+			rs1.next();
+			String tableName = Util.null2String(rs1.getString("tablename"));
+
+			String sql1 = "insert into " + tableName + " (createdate,createtime,count,returnmessage,formmodeid,"
+					+ "modedatacreater,modedatacreatertype,modedatacreatedate,modedatacreatetime) values ('" + createdate
+					+ "','" + createtime + "','"+ count + "','"  + jsonstr + "','391','1','0','" + createdate
+					+ "','" + modedatacreatetime + "')";
+
+			rs1.execute(sql1);
+		} catch (Exception e) {
+			writeLog("workflowTypeList异常:"+e.getMessage());
+		}
+		
 		return jsonstr;
 	}
 
 	@Override
 	public String workflowList(int page, int limit, String name, String workflowid, String status, String startDate,
 			String endDate, String loginname) {
+		String createdate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+		String createtime = new SimpleDateFormat("HH:mm").format(new Date());
+		String modedatacreatetime = new SimpleDateFormat("HH:mm:ss").format(new Date());
+		String receivemessage="[{page:"+page+",limit:"+limit+",name:"+name+",workflowid"+workflowid+",status:"+status+",startDate:"+startDate+",endDate:"+endDate+",loginname:"+loginname+"}]";
 		String IP = getPropValue("SYSIP", "SYSIP");
 		RecordSet rs = new RecordSet();
 		WorkflowDataMode mode = new WorkflowDataMode();
@@ -208,16 +422,52 @@ public class TodoWorkflowServiceImpl extends BaseBean implements TodoWorkflowSer
 			mode.setCount("0");
 			mode.setMsg("登录账号不能为空");
 			String jsonstr = JSON.toJSON(mode).toString();
+			try {
+				RecordSet rs1 = new RecordSet();
+				String tableNameSQL = "select w.tablename,w.id from modeinfo m,workflow_bill w where w.id=m.formid and m.id=392";
+				rs1.execute(tableNameSQL);
+				rs1.next();
+				String tableName = Util.null2String(rs1.getString("tablename"));
+
+				String sql2 = "insert into " + tableName + " (createdate,createtime,receivemessage,formmodeid,"
+						+ "modedatacreater,modedatacreatertype,modedatacreatedate,modedatacreatetime) values ('" + createdate
+						+ "','" + createtime + "','" + receivemessage + "'" + ",'392','1','0','" + createdate
+						+ "','" + modedatacreatetime + "')";
+
+				rs1.execute(sql2);
+			}catch(Exception e) {
+				writeLog("workflowList异常:"+e.getMessage());
+				
+			}
+			
 			return jsonstr;
 		}
 		String sql1 = "select id from hrmresource where loginid = '" + loginname + "'";
 		rs.execute(sql1);
 		rs.next();
 		String id = Util.null2String(rs.getString("id"));
+		
 		if ("".equals(id)) {
 			mode.setCount("0");
 			mode.setMsg("登录账号在泛微OA中不存在");
 			String jsonstr = JSON.toJSON(mode).toString();
+			try {
+				RecordSet rs1 = new RecordSet();
+				String tableNameSQL = "select w.tablename,w.id from modeinfo m,workflow_bill w where w.id=m.formid and m.id=392";
+				rs1.execute(tableNameSQL);
+				rs1.next();
+				String tableName = Util.null2String(rs1.getString("tablename"));
+
+				String sql2 = "insert into " + tableName + " (createdate,createtime,receivemessage,formmodeid,"
+						+ "modedatacreater,modedatacreatertype,modedatacreatedate,modedatacreatetime) values ('" + createdate
+						+ "','" + createtime + "','" + receivemessage + "'" + ",'392','1','0','" + createdate
+						+ "','" + modedatacreatetime + "')";
+
+				rs1.execute(sql2);
+			}catch(Exception e) {
+				writeLog("workflowList异常:"+e.getMessage());
+				
+			}
 			return jsonstr;
 		}
 		boolean existOrNot = existInRole(id);
@@ -382,6 +632,23 @@ public class TodoWorkflowServiceImpl extends BaseBean implements TodoWorkflowSer
 		}
 		mode.setData(data);
 		String jsonstr = JSON.toJSON(mode).toString();
+		try {
+			RecordSet rs1 = new RecordSet();
+			String tableNameSQL = "select w.tablename,w.id from modeinfo m,workflow_bill w where w.id=m.formid and m.id=392";
+			rs1.execute(tableNameSQL);
+			rs1.next();
+			String tableName = Util.null2String(rs1.getString("tablename"));
+			String sql2 = "insert into " + tableName + " (createdate,createtime,lastname,count,receivemessage,formmodeid,"
+					+ "modedatacreater,modedatacreatertype,modedatacreatedate,modedatacreatetime) values ('" + createdate
+					+ "','" + createtime + "','" + id + "',"+cnum+",'" + receivemessage + "','392','1','0','" + createdate
+					+ "','" + modedatacreatetime + "')";
+
+			rs1.execute(sql2);
+		} catch (Exception e) {
+			writeLog("workflowList异常"+e.getMessage());
+		}
+		
+		
 		return jsonstr;
 	}
 	
@@ -462,6 +729,9 @@ public class TodoWorkflowServiceImpl extends BaseBean implements TodoWorkflowSer
 
 	@Override
 	public String ljcyRemind(String content) {
+		String createdate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+		String createtime = new SimpleDateFormat("HH:mm").format(new Date());
+		String modedatacreatetime = new SimpleDateFormat("HH:mm:ss").format(new Date());
 		JSONObject jsonObject = JSON.parseObject(content);
 		String title = jsonObject.getString("title");
 		String nr = jsonObject.getString("content");
@@ -490,12 +760,44 @@ public class TodoWorkflowServiceImpl extends BaseBean implements TodoWorkflowSer
 		if (!"".equals(hrmids)) {
 			requestid = createWorkflow(hrmids, title, nr);
 		}
-		if (!"".equals(requestid) && Integer.parseInt(requestid) > 0) {
-			return "{\"message\":\"成功\",\"requestid\":\"" + requestid + "\"}";
-		}
-		// {"title":"","content":"","hrm":[{"loginid":""}]}
+		
+		RecordSet rs=new RecordSet();
+		String tableNameSQL = "select w.tablename,w.id from modeinfo m,workflow_bill w where w.id=m.formid and m.id=393";
+		rs.execute(tableNameSQL);
+		rs.next();
+		String tableName = Util.null2String(rs.getString("tablename"));
 
-		return "{\"message\":\"失败，错误码：" + requestid + "\",\"requestid\":\"\"}";
+		String sql=""; 
+		String returnmessage="";
+		
+		if (!"".equals(requestid) && Integer.parseInt(requestid) > 0) {
+			try {
+				returnmessage="{\"message\":\"成功\",\"requestid\":\"" + requestid + "\"}";
+				sql = "insert into " + tableName + " (createdate,createtime,content,title,receivemessage,returnmessage,formmodeid,"
+						+ "modedatacreater,modedatacreatertype,modedatacreatedate,modedatacreatetime) values ('" + createdate
+						+ "','" + createtime + "','"+ nr + "','"+ title + "','" +  content + "','"+returnmessage+"','393','1','0','" + createdate
+						+ "','" + modedatacreatetime + "')";
+				rs.execute(sql);
+			} catch (Exception e) {
+				writeLog("ljcyRemind异常:"+e.getMessage());
+			}
+			
+
+			return returnmessage;
+		}else{
+			
+			try {
+				returnmessage="{\"message\":\"失败，错误码：" + requestid + "\",\"requestid\":\"\"}";
+				sql = "insert into " + tableName + " (createdate,createtime,content,title,receivemessage,returnmessage,formmodeid,"
+						+ "modedatacreater,modedatacreatertype,modedatacreatedate,modedatacreatetime) values ('" + createdate
+						+ "','" + createtime + "','"+ nr + "','"+ title + "','" +  content + "','"+returnmessage+"','393','1','0','" + createdate
+						+ "','" + modedatacreatetime + "')";
+				rs.execute(sql);
+			} catch (Exception e) {
+				writeLog("ljcyRemind异常:"+e.getMessage());
+			}
+			return returnmessage;
+		}
 	}
 
 	private String createWorkflow(String hrmids, String title, String content) {
@@ -547,17 +849,56 @@ public class TodoWorkflowServiceImpl extends BaseBean implements TodoWorkflowSer
 
 	@Override
 	public String finishWorkflowTypeList(String loginname) {
+		String createdate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+		String createtime = new SimpleDateFormat("HH:mm").format(new Date());
+		String modedatacreatetime = new SimpleDateFormat("HH:mm:ss").format(new Date());
 		String loginid = Util.null2String(loginname);
+		String info="";
 		if ("".equals(loginid)) {
-			return "登录账号不能为空";
+			info="登录账号不能为空";
+			try {
+				RecordSet rs1=new RecordSet();
+				String tableNameSQL = "select w.tablename,w.id from modeinfo m,workflow_bill w where w.id=m.formid and m.id=395";
+				rs1.execute(tableNameSQL);
+				rs1.next();
+				String tableName = Util.null2String(rs1.getString("tablename"));
+
+				String sql1 = "insert into " + tableName + " (createdate,createtime,receivemessage,returnmessage,formmodeid,"
+						+ "modedatacreater,modedatacreatertype,modedatacreatedate,modedatacreatetime) values ('" + createdate
+						+ "','" + createtime + "','" + loginname + "','" + info + "','395','1','0','" + createdate
+						+ "','" + modedatacreatetime + "')";
+
+				rs1.execute(sql1);
+			} catch (Exception e) {
+				writeLog("finishWorkflowTypeList异常:"+e.getMessage());
+			}
+			return info;
 		}
 		RecordSet rs = new RecordSet();
 		String sql = "select id from hrmresource where loginid = '" + loginname + "'";
 		rs.execute(sql);
 		rs.next();
 		String id = Util.null2String(rs.getString("id"));
+		
 		if ("".equals(id)) {
-			return "登录账号" + loginname + "在泛微OA中不存在";
+			info="登录账号" + loginname + "在泛微OA中不存在";
+			try {
+				RecordSet rs1=new RecordSet();
+				String tableNameSQL = "select w.tablename,w.id from modeinfo m,workflow_bill w where w.id=m.formid and m.id=395";
+				rs1.execute(tableNameSQL);
+				rs1.next();
+				String tableName = Util.null2String(rs1.getString("tablename"));
+
+				String sql1 = "insert into " + tableName + " (createdate,createtime,receivemessage,returnmessage,formmodeid,"
+						+ "modedatacreater,modedatacreatertype,modedatacreatedate,modedatacreatetime) values ('" + createdate
+						+ "','" + createtime + "','" + loginname + "','" + info + "','395','1','0','" + createdate
+						+ "','" + modedatacreatetime + "')";
+
+				rs1.execute(sql1);
+			} catch (Exception e) {
+				writeLog("finishWorkflowTypeList异常:"+e.getMessage());
+			}
+			return info;
 		}
 		String finishsql = "select DISTINCT workflowid,workflowname from (SELECT DISTINCT t1.workflowid ,t3.workflowname "
 				+ "FROM workflow_requestbase t1, workflow_currentoperator t2, workflow_base t3 WHERE "
@@ -580,18 +921,56 @@ public class TodoWorkflowServiceImpl extends BaseBean implements TodoWorkflowSer
 			list.add(mode);
 		}
 		String jsonstr = JSON.toJSON(list).toString();
+		try {
+			RecordSet rs1=new RecordSet();
+			String tableNameSQL = "select w.tablename,w.id from modeinfo m,workflow_bill w where w.id=m.formid and m.id=395";
+			rs1.execute(tableNameSQL);
+			rs1.next();
+			String tableName = Util.null2String(rs1.getString("tablename"));
+
+			String sql1 = "insert into " + tableName + " (createdate,createtime,lastname,receivemessage,returnmessage,formmodeid,"
+					+ "modedatacreater,modedatacreatertype,modedatacreatedate,modedatacreatetime) values ('" + createdate
+					+ "','" + createtime + "','"+ id + "','" + loginname + "'" + ",'" + jsonstr + "','395','1','0','" + createdate
+					+ "','" + modedatacreatetime + "')";
+
+			rs1.execute(sql1);
+		} catch (Exception e) {
+			writeLog("finishWorkflowTypeList异常:"+e.getMessage());
+		}
 		return jsonstr;
 	}
 
 	@Override
 	public String finishWorklowList(int page, int limit, String loginname, String requestid, String name,
 			String workflowid) {
+		String createdate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+		String createtime = new SimpleDateFormat("HH:mm").format(new Date());
+		String modedatacreatetime = new SimpleDateFormat("HH:mm:ss").format(new Date());
+		String message="[{page:"+page+",limit:"+limit+",loginname:"+loginname+",requestid:"+requestid+",name:"+name+",workflowid:"+workflowid+"}]";
 		String IP = getPropValue("SYSIP", "SYSIP");
+		String jsonstr ="";
 		FinishedWorkflowModes modes = new FinishedWorkflowModes();
 		if ("".equals(Util.null2String(loginname))) {
 			modes.setCount("0");
 			modes.setMsg("登录账号不能为空");
-			String jsonstr = JSON.toJSON(modes).toString();
+			jsonstr= JSON.toJSON(modes).toString();
+			try {
+				RecordSet rs1=new RecordSet();
+				String tableNameSQL = "select w.tablename,w.id from modeinfo m,workflow_bill w where w.id=m.formid and m.id=396";
+				rs1.execute(tableNameSQL);
+				rs1.next();
+				String tableName = Util.null2String(rs1.getString("tablename"));
+
+				String sql1 = "insert into " + tableName + " (createdate,createtime,receivemessage,formmodeid,"
+						+ "modedatacreater,modedatacreatertype,modedatacreatedate,modedatacreatetime) values ('" + createdate
+						+ "','" + createtime + "','"  + message + "','396','1','0','" + createdate
+						+ "','" + modedatacreatetime + "')";
+
+				rs1.execute(sql1);
+			} catch (Exception e) {
+				writeLog("finishWorklowList异常:"+e.getMessage());
+			}
+			
 			return jsonstr;
 		}
 		RecordSet rs = new RecordSet();
@@ -599,10 +978,27 @@ public class TodoWorkflowServiceImpl extends BaseBean implements TodoWorkflowSer
 		rs.execute(sql);
 		rs.next();
 		String id = Util.null2String(rs.getString("id"));
+		
 		if ("".equals(id)) {
 			modes.setCount("0");
 			modes.setMsg("登录账号在泛微OA中不存在");
-			String jsonstr = JSON.toJSON(modes).toString();
+			jsonstr = JSON.toJSON(modes).toString();
+			try {
+				RecordSet rs1=new RecordSet();
+				String tableNameSQL = "select w.tablename,w.id from modeinfo m,workflow_bill w where w.id=m.formid and m.id=396";
+				rs1.execute(tableNameSQL);
+				rs1.next();
+				String tableName = Util.null2String(rs1.getString("tablename"));
+
+				String sql1 = "insert into " + tableName + " (createdate,createtime,receivemessage,formmodeid,"
+						+ "modedatacreater,modedatacreatertype,modedatacreatedate,modedatacreatetime) values ('" + createdate
+						+ "','" + createtime + "','"  + message + "','396','1','0','" + createdate
+						+ "','" + modedatacreatetime + "')";
+
+				rs1.execute(sql1);
+			} catch (Exception e) {
+				writeLog("finishWorklowList异常:"+e.getMessage());
+			}
 			return jsonstr;
 		}
 		String wfId = "";
@@ -611,10 +1007,27 @@ public class TodoWorkflowServiceImpl extends BaseBean implements TodoWorkflowSer
 			rs.execute(workflowsql);
 			rs.next();
 			wfId = Util.null2String(rs.getString("id"));
+		
 			if ("".equals(wfId)) {
 				modes.setCount("0");
 				modes.setMsg("wname:" + workflowid + " 在泛微OA中不存在");
-				String jsonstr = JSON.toJSON(modes).toString();
+				jsonstr = JSON.toJSON(modes).toString();
+				try {
+					RecordSet rs1=new RecordSet();
+					String tableNameSQL = "select w.tablename,w.id from modeinfo m,workflow_bill w where w.id=m.formid and m.id=396";
+					rs1.execute(tableNameSQL);
+					rs1.next();
+					String tableName = Util.null2String(rs1.getString("tablename"));
+
+					String sql1 = "insert into " + tableName + " (createdate,createtime,receivemessage,formmodeid,"
+							+ "modedatacreater,modedatacreatertype,modedatacreatedate,modedatacreatetime) values ('" + createdate
+							+ "','" + createtime + "','"  + message + "','396','1','0','" + createdate
+							+ "','" + modedatacreatetime + "')";
+
+					rs1.execute(sql1);
+				} catch (Exception e) {
+					writeLog("finishWorklowList异常:"+e.getMessage());
+				}
 				return jsonstr;
 			}
 		}
@@ -690,7 +1103,24 @@ public class TodoWorkflowServiceImpl extends BaseBean implements TodoWorkflowSer
 			data.add(mod);
 		}
 		mode.setData(data);
-		String jsonstr = JSON.toJSON(mode).toString();
+		jsonstr = JSON.toJSON(mode).toString();
+		try {
+			RecordSet rs1=new RecordSet();
+			String tableNameSQL = "select w.tablename,w.id from modeinfo m,workflow_bill w where w.id=m.formid and m.id=396";
+			rs1.execute(tableNameSQL);
+			rs1.next();
+			String tableName = Util.null2String(rs1.getString("tablename"));
+
+			String sql1 = "insert into " + tableName + " (createdate,createtime,lastname,count,receivemessage,formmodeid,"
+					+ "modedatacreater,modedatacreatertype,modedatacreatedate,modedatacreatetime) values ('" + createdate
+					+ "','" + createtime + "','" + id + "'," + count + ",'"  + message + "','396','1','0','" + createdate
+					+ "','" + modedatacreatetime + "')";
+
+			rs1.execute(sql1);
+		} catch (Exception e) {
+			writeLog("finishWorklowList异常:"+e.getMessage());
+		}
+		
 		return jsonstr;
 	}
 

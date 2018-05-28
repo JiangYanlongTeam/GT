@@ -1,28 +1,39 @@
 package weaver.interfaces.service.modedata;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.input.SAXBuilder;
-import org.xml.sax.InputSource;
-import weaver.conn.RecordSet;
-import weaver.formmode.webservices.ModeDataServiceImpl;
-import weaver.formmode.webservices.ModeDateService;
-import weaver.general.Util;
-
 import java.io.StringReader;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ModeDServiceImpl implements ModeDService {
+import org.jdom.Document;
+import org.jdom.Element;
+import org.jdom.input.SAXBuilder;
+import org.xml.sax.InputSource;
 
-	@Override
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+
+import weaver.conn.RecordSet;
+import weaver.formmode.webservices.ModeDataServiceImpl;
+import weaver.formmode.webservices.ModeDateService;
+import weaver.general.BaseBean;
+import weaver.general.Util;
+
+public class ModeDServiceImpl extends BaseBean implements ModeDService {
+
+	@Override//插入来件查阅
 	public String insert(String data) {
+		String createdate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+		String createtime = new SimpleDateFormat("HH:mm").format(new Date());
+		String modedatacreatetime = new SimpleDateFormat("HH:mm:ss").format(new Date());
+		//[{"mc":"aa","dz":"aa1","fjr":"aa2","sjr","aa3","fjrq":"aa4"}],{"mc":"aa","dz":"aa1","fjr":"aa2","sjr","aa3","fjrq":"aa4"}]
+		//[{"mc":"aa"},{"dz":"aa1"},{"fjr":"aa2"},{"sjr","aa3"},{"fjrq":"aa4"},{"mc":"aa"},{"dz":"aa1"},{"fjr":"aa2"},{"sjr","aa3"},{"fjrq":"aa4"}]
 		JSONArray arrs = JSON.parseArray(data);
 		ModeDateService service = new ModeDataServiceImpl();
+		String jsonstr="";
 		for (int i = 0; i < arrs.size(); i++) {
 			JSONObject arr = (JSONObject) arrs.get(i);
 			String mc = (String) arr.get("mc");
@@ -82,20 +93,57 @@ public class ModeDServiceImpl implements ModeDService {
 					sb.append("</maintable>");
 					sb.append("</data>");
 					sb.append("</ROOT>");
-					new weaver.general.BaseBean().writeLog("传入参数：" + sb.toString());
+					new BaseBean().writeLog("传入参数：" + sb.toString());
 					String result = service.saveModeData(sb.toString());
 					Map<String, String> map = ana(result);
 					if (map.isEmpty() && null == map.get("id")) {
 						ModeInfo mode = new ModeInfo();
 						mode.setMessage(result);
-						return JSON.toJSON(mode).toString();
+						jsonstr=JSON.toJSON(mode).toString();
+						try {
+							RecordSet rs=new RecordSet();
+							String tableNameSQL = "select w.tablename,w.id from modeinfo m,workflow_bill w where w.id=m.formid and m.id=383";
+							rs.execute(tableNameSQL);
+							rs.next();
+							String tableName = Util.null2String(rs.getString("tablename"));
+
+							String sql = "insert into " + tableName + " (createdate,createtime,receivemessage,returnmessage,formmodeid,"
+									+ "modedatacreater,modedatacreatertype,modedatacreatedate,modedatacreatetime) values ('" + createdate
+									+ "','" + createtime + "','" + data + "'" + ",'" + jsonstr + "','383','1','0','" + createdate
+									+ "','" + modedatacreatetime + "')";
+
+							rs.execute(sql);
+						} catch (Exception e) {
+							writeLog("insert异常:"+e.getMessage());
+						}
+						
+						return jsonstr;
 					}
 				}
 			}
 		}
 		ModeInfo mode = new ModeInfo();
 		mode.setMessage("操作成功");
-		return JSON.toJSON(mode).toString();
+		jsonstr=JSON.toJSON(mode).toString();
+		try {
+			RecordSet rs=new RecordSet();
+			String tableNameSQL = "select w.tablename,w.id from modeinfo m,workflow_bill w where w.id=m.formid and m.id=383";
+			rs.execute(tableNameSQL);
+			rs.next();
+			String tableName = Util.null2String(rs.getString("tablename"));
+
+			String sql = "insert into " + tableName + " (createdate,createtime,receivemessage,returnmessage,formmodeid,"
+					+ "modedatacreater,modedatacreatertype,modedatacreatedate,modedatacreatetime) values ('" + createdate
+					+ "','" + createtime + "','" + data + "'" + ",'" + jsonstr + "','383','1','0','" + createdate
+					+ "','" + modedatacreatetime + "')";
+
+			rs.execute(sql);
+		} catch (Exception e) {
+			writeLog("insert异常:"+e.getMessage());
+		}
+		
+		
+		return jsonstr;
 	}
 	
 	@Override
@@ -152,7 +200,7 @@ public class ModeDServiceImpl implements ModeDService {
 					sb.append("</maintable>");
 					sb.append("</data>");
 					sb.append("</ROOT>");
-					new weaver.general.BaseBean().writeLog("传入参数：" + sb.toString());
+					new BaseBean().writeLog("传入参数：" + sb.toString());
 					String result = service.saveModeData(sb.toString());
 					Map<String, String> map = ana(result);
 					if (map.isEmpty() && null == map.get("id")) {
