@@ -14,7 +14,7 @@ import weaver.general.Util;
 import weaver.hrm.User;
 import weaver.hrm.resource.ResourceComInfo;
 /**
- *by yangw at 20180523 秀爱撒啊
+ *by yangw at 20180523
  *主要是修改如果type是固定资产且，人员是魏雪清和吴晓海时调用查询方法。
  */
 public class WorkflowReport extends BaseBean{
@@ -233,7 +233,7 @@ public class WorkflowReport extends BaseBean{
      */
     public boolean existInRole(String id) {
         RecordSet rs = new RecordSet();
-        rs.execute("select * from HRMROLEMEMBERS where ROLEID = 542 and resourceid = '"+id+"'");
+        rs.execute("select * from HRMROLEMEMBERS where ROLEID = 562 and resourceid = '"+id+"'");
         while(rs.next()) {
             return true;
         }
