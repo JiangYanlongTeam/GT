@@ -43,7 +43,7 @@
 			<tbody>
 				<tr>
 					<td style="border-bottom:1px solid #fff;" >
-							<img src="/portal2018/images/1.png" _target="/page/element/compatible/more.jsp?ebaseid=8&eid=346"/><br />
+							<img src="/portal2018/images/1.png" _target="/interface/jiangyl/workflow/workflowreport.jsp?type=allgdzc&workflowids=205,222"/><br />
 							<div>固定资产查询</div>						
 					</td>
 		

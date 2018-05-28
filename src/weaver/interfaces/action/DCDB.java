@@ -138,6 +138,7 @@ public class DCDB extends BaseBean {
 			sql += " and a.id = '"+id+"' ";
 		}
 		sql += " order by a.maxdate desc ";
+		writeLog("sql2:"+sql);
 		rs.execute(sql);
 		while (rs.next()) {
 			String _type = Util.null2String(rs.getString("type"));
@@ -176,6 +177,64 @@ public class DCDB extends BaseBean {
 			map.put("qbyj", _qbyj);
 			map.put("wxqyj", _wxqyj);
 			map.put("wjmyj", _wjmyj);
+
+			data.add(map);
+		}
+		return data;
+	}
+	/**
+	 * 车辆调度查询---即查询所有的车辆申请流程信息
+	 * by yangw at 20180528
+	 * @return
+	 */
+	public List<Map<String, String>> getCldd(User user, Map<String, String> otherparams, HttpServletRequest request,
+												HttpServletResponse response) {
+		String requestname = Util.null2String(otherparams.get("requestname"));
+		String id = Util.null2String(otherparams.get("reqid"));
+		RecordSet rs = new RecordSet();
+		List<Map<String, String>> data = new ArrayList<Map<String, String>>();
+
+         writeLog("车辆调度查询");
+		boolean isExist = existInRole2(user.getUID()+"");
+		if(!isExist) {
+			return data;
+		}
+
+		String sql = "select  a.requestid,b.requestname,a.ycdw,b.creater as sqr,(a.ycrq||' '||a.ycsj) as ycsj,d.selectname as sqcx ,a.jsy,c.nodename as zbjd,a.pcrq"+
+		"  from formtable_main_63 a ,workflow_requestbase b,workflow_nodebase c,WORKFLOW_SELECTITEM d"+
+		" where a.requestid =b.requestid and b.CURRENTNODEID =c.id  and d.FIELDID=8951 and d.SELECTVALUE = a.sqcx ";
+		if(!"".equals(requestname)) {
+			sql += " and a.requestname like '%"+requestname+"%' ";
+		}
+		if(!"".equals(id)) {
+			sql += " and a.requestid = '"+id+"' ";
+		}
+		sql += " order by a.requestid desc ";
+		writeLog("sql3:"+sql);
+		rs.execute(sql);
+		while (rs.next()) {
+			String _id = Util.null2String(rs.getString("requestid"));
+			String _requestname = Util.null2String(rs.getString("requestname"));
+			String _ycdw = Util.null2String(rs.getString("ycdw"));
+			String _sqr = Util.null2String(rs.getString("sqr"));
+			String _ycsj = Util.null2String(rs.getString("ycsj"));
+			String _sqcx = Util.null2String(rs.getString("sqcx"));
+			String _jsy = Util.null2String(rs.getString("jsy"));
+			String _zbjd = Util.null2String(rs.getString("zbjd"));
+			String _pcrq = Util.null2String(rs.getString("pcrq"));
+
+			Map<String, String> map = new HashMap<String, String>();
+			String name = "<a onclick=\"openFlow('"+_id+"')\" title='" + _requestname
+					+ "' style='cursor:pointer'>" + _requestname + "</a>";
+			map.put("reqid", _id);
+			map.put("requestname", name);
+			map.put("ycdw", _ycdw);
+			map.put("sqr", _sqr);
+			map.put("ycsj", _ycsj);
+			map.put("sqcx", _sqcx);
+			map.put("jsy", _jsy);
+			map.put("zbjd", _zbjd);
+			map.put("pcrq", _pcrq);
 
 			data.add(map);
 		}
@@ -241,7 +300,20 @@ public class DCDB extends BaseBean {
 	 */
 	public boolean existInRole(String id) {
 		RecordSet rs = new RecordSet();
-		rs.execute("select * from HRMROLEMEMBERS where ROLEID = 541 and resourceid = '"+id+"'");
+		rs.execute("select * from HRMROLEMEMBERS where ROLEID = 581 and resourceid = '"+id+"'");
+		while(rs.next()) {
+			return true;
+		}
+		return false;
+	}
+	/**
+	 * 判断角色中是否存在传入人员id
+	 * @param id
+	 * @return
+	 */
+	public boolean existInRole2(String id) {
+		RecordSet rs = new RecordSet();
+		rs.execute("select * from HRMROLEMEMBERS where ROLEID = 582 and resourceid = '"+id+"'");
 		while(rs.next()) {
 			return true;
 		}
