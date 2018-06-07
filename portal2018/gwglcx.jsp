@@ -54,7 +54,7 @@
 					<div>虚拟</div>						
 					</td>
 					<td style="border-bottom:1px solid #fff;" >
-							<img src="/portal2018/images/1.png" _target="/formmode/search/CustomSearchBySimple.jsp?customid=381"/><br />
+							<img src="/portal2018/images/1.png" _target="/interface/jiangyl/dcdb/ldpsyjview.jsp"/><br />
 					<div>局领导批示意见</div>						
 					</td>
 					</tr>

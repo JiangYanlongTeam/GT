@@ -58,6 +58,7 @@ public class CreateDCDBCQTXAuto extends BaseCronJob{
 		rs.execute(sql1);
 		while(rs.next()) {
 			String zbbm = Util.null2String(Util.null2String(rs.getString("zbbm")));
+			String currentBm = Util.null2String(Util.null2String(rs.getString("departmentid")));
 			String cbrry = Util.null2String(Util.null2String(rs.getString("cbrry")));
 			String requestid = Util.null2String(Util.null2String(rs.getString("requestid")));
 			List<String> cbrrList = new ArrayList<String>();
@@ -67,8 +68,10 @@ public class CreateDCDBCQTXAuto extends BaseCronJob{
 					cbrrList.add(strs[i]);
 				}
 			}
-			List<String> hrmList = getHrmID(zbbm);
-			List<String> nqList = getNQHrmID(zbbm);
+			//List<String> hrmList = getHrmID(zbbm);
+			//List<String> nqList = getNQHrmID(zbbm);
+			List<String> hrmList = getHrmID(currentBm);
+			List<String> nqList = getNQHrmID(currentBm);
 			Map<String,String> hrmMap = new HashMap<String,String>();
 			StringBuffer sb = new StringBuffer(",");
 			for(String hrm : hrmList) {
@@ -118,6 +121,7 @@ public class CreateDCDBCQTXAuto extends BaseCronJob{
 		rs.execute(sql2);
 		while(rs.next()) {
 			String zbbm = Util.null2String(Util.null2String(rs.getString("zbbm")));
+			String currentBm = Util.null2String(Util.null2String(rs.getString("departmentid")));
 			String cbrry = Util.null2String(Util.null2String(rs.getString("cbrry")));
 			String requestid = Util.null2String(Util.null2String(rs.getString("requestid")));
 			List<String> cbrrList = new ArrayList<String>();
@@ -127,8 +131,10 @@ public class CreateDCDBCQTXAuto extends BaseCronJob{
 					cbrrList.add(strs[i]);
 				}
 			}
-			List<String> hrmList = getHrmID(zbbm);
-			List<String> nqList = getNQHrmID(zbbm);
+			//List<String> hrmList = getHrmID(zbbm);
+			//List<String> nqList = getNQHrmID(zbbm);
+			List<String> hrmList = getHrmID(currentBm);
+			List<String> nqList = getNQHrmID(currentBm);
 			Map<String,String> hrmMap = new HashMap<String,String>();
 			StringBuffer sb = new StringBuffer(",");
 			for(String hrm : hrmList) {

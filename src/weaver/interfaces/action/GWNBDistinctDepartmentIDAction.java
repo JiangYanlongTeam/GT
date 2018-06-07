@@ -81,11 +81,27 @@ public class GWNBDistinctDepartmentIDAction extends BaseBean implements Action {
         String sbs = sb.toString();
 
         if (",".equals(sbs)) {
-            //sbs = sbs.substring(1, sbs.length() - 1);
+            String sql2="select  * from workflow_requestbase where  currentnodetype !=3 and mainrequestid = "+requestid;
+            RecordSet rs2= new RecordSet();
+            rs2.execute(sql2);
+            if(rs2.next()){//如果子流程全部归档，将标志置1，没有全部归档置0
+                String sql = "update " + tableNamme + " set gdflag = 0 where requestid = '" + requestid + "'";
+                writeLog("执行更新SQL：" + sql);
+                rs.execute(sql);
+            }else{
+                String sql = "update " + tableNamme + " set gdflag = 1 where requestid = '" + requestid + "'";
+                writeLog("执行更新SQL：" + sql);
+                rs.execute(sql);
+            }
+            //sbs = sbs.subs
+            // tring(1, sbs.length() - 1);
             String sql = "update " + tableNamme + " set hqbmnq = '' where requestid = '" + requestid + "'";
             writeLog("执行更新SQL：" + sql);
             rs.execute(sql);
         }else{
+            String sql22 = "update " + tableNamme + " set gdflag = 0 where requestid = '" + requestid + "'";
+            writeLog("执行更新SQL：" + sql22);
+            rs.execute(sql22);
             sbs = sbs.substring(1, sbs.length() - 1);
             String sql = "update " + tableNamme + " set hqbmnq = '" + sbs + "' where requestid = '" + requestid + "'";
             writeLog("执行更新SQL：" + sql);

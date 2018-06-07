@@ -47,7 +47,7 @@
 							<div>用车申请</div>						
 					</td>
 					<td style="border-bottom:1px solid #fff;">
-							<img src="/portal2018/images/1.png"  _target="/formmode/search/CustomSearchBySimple.jsp?customid=101"/><br />
+							<img src="/portal2018/images/1.png"  _target="/interface/jiangyl/dcdb/clddcx.jsp"/><br />
 							<div>车辆调度</div>						
 					</td>
 					

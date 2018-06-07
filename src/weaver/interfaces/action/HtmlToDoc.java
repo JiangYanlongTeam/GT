@@ -155,7 +155,7 @@ public class HtmlToDoc extends BaseBean {
 			sb.append(sq);
 //			sb.append("</tr>");
 //			sb.append("<tr>");
-			String s = "<p style=\"font-size:16px; font-family:微软雅黑;margin:0 auto\">局办意见：请" + ysldChinese + " 阅示。";
+			String s = "<p style=\"font-size:16px; font-family:微软雅黑;margin:0 auto\">局办意见：呈" + ysldChinese + " 阅示。";
 			if(!yldChinese.equals("")) {
 				s += "呈"+yldChinese+" 阅。</p>";
 			} else {
@@ -174,7 +174,7 @@ public class HtmlToDoc extends BaseBean {
 			String jz = getJZ(requestid);
 //			sb.append("<tr>");
 			if(!"".equals(jz)) {
-				sb.append("<p style=\"font-size:16px; font-family:微软雅黑;margin:0 auto\">局长拟办意见："+jz+"</p>"+hh);
+				sb.append("<p style=\"font-size:16px; font-family:微软雅黑;margin:0 auto\">局长意见："+jz+"</p>"+hh);
 			}
 //			sb.append("</tr>");
 			
@@ -207,7 +207,7 @@ public class HtmlToDoc extends BaseBean {
 
 	public String getXBBM(String depid) {
 		RecordSet rs = new RecordSet();
-		rs.execute("select zm from uf_xbbmfz where xh in ("+depid+")");
+		rs.execute("select distinct zm from uf_xbbmfz where xh in ("+depid+")");
 		StringBuffer sb = new StringBuffer(",");
 		while(rs.next()) {
 			String cw = Util.null2String(rs.getString("zm"));
