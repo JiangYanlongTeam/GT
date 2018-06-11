@@ -22,6 +22,7 @@
     ArrayList[] nodelist;
     ArrayList nodeids=new ArrayList();
     ArrayList nodenames=new ArrayList();
+    int _userid = user.getUID();
 	/*
     String sql="select a.nodeid,b.nodename from workflow_currentoperator a,workflow_nodebase b where a.nodeid=b.id and a.requestid="+requestid+" order by a.id";
     RecordSet.executeSql(sql);
@@ -273,8 +274,14 @@ public String getCurrentOperator(String nodeid, String requestid){
 						<%	
 						}
 				    }//end if nodeattribute == 2
-				}   
+				}
 				%>
+				<TR class=DataDark>
+					<td>退回意见</td>
+					<td colspan="2">
+						<textarea id="rejectremark" name="rejectremark" ></textarea>
+					</td>
+				</TR>
 	        </table>
 	     </wea:item>
 	  </wea:group>
@@ -354,6 +361,33 @@ try{
 	dialog = parent.parent.getDialog(parent);
 }catch(e){
 }
+function rejectremark(){
+    var rejectmarkval = jQuery("#rejectremark").val();
+	var wfID = "<%=workflowid%>";
+	var reqID = "<%=requestid%>";
+	var fqrID = "<%=_userid%>";
+	var nodename = "<%=nodeid%>";
+    var rejectnodeid=getRadioValue("rejectnodeid");
+    jQuery.ajax({
+        url:'/interface/jiangyl/workflow/reject.jsp',
+        data : {
+            rejectmarkval : rejectmarkval,
+            wfID : wfID,
+            reqID : reqID,
+            fqrID : fqrID,
+            nodename : nodename,
+            rejectnodeid : rejectnodeid
+        },
+        type:'post',
+        async: false,
+        dataType:'json',
+        cache:'false',
+        success:function(data) {
+
+        }
+    });
+
+}
 function callback(returnjson){
 	if(dialog){
 		try{
@@ -406,6 +440,7 @@ function onsave(){
         return false;
     }
     <%}%>
+    rejectremark();
     var nodeattr = jQuery("#isfork").val();
     var returnjson = {id:"reject",name:nodeids+"|"+rejectnodeid+"|"+nodeattr}
     callback(returnjson);

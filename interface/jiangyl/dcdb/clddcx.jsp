@@ -91,7 +91,7 @@ String para4=userlang+"+"+user.getUID()+"+"+user.getUID();
 								"       </head>"+
 								" </table>";
 			%>
-			
+
 			<TABLE class=ViewForm valign="top">
 		                     <TR>
 		                         <TD valign="top" colspan=4>

@@ -49,6 +49,8 @@ public class CEB2PDFAction extends BaseBean implements Action {
 		String cebcolumn = "xgfj";
 		String requestid = request.getRequestid();
 
+		String requestname = getRequestName(requestid);
+
 		Property[] properties = request.getMainTableInfo().getProperty();// 获取表单主字段信息
 		for (int i = 0; i < properties.length; i++) {
 			String name = properties[i].getName();// 主字段名称
@@ -141,7 +143,7 @@ public class CEB2PDFAction extends BaseBean implements Action {
 
 			String str1 = imagefiles.replaceAll(",", "\\\\");
 			DefaultHttpClient httpClient = new DefaultHttpClient();
-			String urls = convertip + "convert?filename=" + str1 + "&operation=convert&requestid=" + requestid
+			String urls = convertip + "convert?filename=" + str1 + "&operation=convert&requestname="+requestname+"&requestid=" + requestid
 					+ "&pdfdocname=" + preStr;
 			URL url;
 			try {
@@ -204,6 +206,14 @@ public class CEB2PDFAction extends BaseBean implements Action {
 		return SUCCESS;
 	}
 
+	public String getRequestName(String requestid) {
+		String sql = "select requestname from workflow_requestbase where requestid = '"+requestid+"'";
+		RecordSet rs = new RecordSet();
+		rs.execute(sql);
+		rs.next();
+		String requestname = Util.null2String(rs.getString("requestname"));
+		return requestname;
+	}
 	/**
 	 * 获取文件后缀名 如：.zip返回zip，如果没有后缀名，则返回文件全名
 	 * 

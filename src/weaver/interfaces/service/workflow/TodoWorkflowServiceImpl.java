@@ -659,7 +659,7 @@ public class TodoWorkflowServiceImpl extends BaseBean implements TodoWorkflowSer
 	 */
 	public boolean existInRole(String id) {
 		RecordSet rs = new RecordSet();
-		rs.execute("select * from HRMROLEMEMBERS where ROLEID = 541 and resourceid = '"+id+"'");
+		rs.execute("select * from MEMBERS where ROLEID = 541 and resourceid = '"+id+"'");
 		while(rs.next()) {
 			return true;
 		}

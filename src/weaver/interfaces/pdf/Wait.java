@@ -5,6 +5,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.rmi.RemoteException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.axis.encoding.Base64;
 
@@ -15,9 +19,9 @@ import weaver.docs.webservices.DocService;
 import weaver.docs.webservices.DocServiceImpl;
 import weaver.general.BaseBean;
 import weaver.general.Util;
-import weaver.workflow.webservices.WorkflowRequestInfo;
-import weaver.workflow.webservices.WorkflowService;
-import weaver.workflow.webservices.WorkflowServiceImpl;
+import weaver.hrm.company.DepartmentComInfo;
+import weaver.hrm.resource.ResourceComInfo;
+import weaver.workflow.webservices.*;
 
 public class Wait extends BaseBean implements WaitService {
 
@@ -36,9 +40,10 @@ public class Wait extends BaseBean implements WaitService {
 	private String dirid;
 	private String message;
 	private String PDFDocName;
+	private String WarnTimeFlag;
 
-	public String StatusChange(String serialID, String status, String pdfFileName, String ErrorCode, String RequestID, String PDFDocName) {
-		writeLog("接收参数：serialID:"+serialID + " status:" + status + " pdfFileName:" + pdfFileName + " ErrorCode:"+ErrorCode + " RequestID:"+RequestID + " PDFDocName:"+PDFDocName);
+	public String StatusChange(String serialID, String status, String pdfFileName, String ErrorCode, String RequestID, String PDFDocName, String WarnTimeFlag) {
+		writeLog("接收参数：serialID:"+serialID + " status:" + status + " pdfFileName:" + pdfFileName + " ErrorCode:"+ErrorCode + " RequestID:"+RequestID + " PDFDocName:"+PDFDocName + " WarnTimeFlag:"+WarnTimeFlag);
 		this.server = Util.null2String(getPropValue("html2pdf", "ftpserver"));
 		this.port = Util.null2String(getPropValue("html2pdf", "port"));
 		this.userName = Util.null2String(getPropValue("html2pdf", "ftpuser"));
@@ -53,14 +58,16 @@ public class Wait extends BaseBean implements WaitService {
 		this.status = status;
 		this.errorCode = ErrorCode;
 		this.PDFDocName = PDFDocName;
+		this.WarnTimeFlag = WarnTimeFlag;
 		return execute();
 	}
 
 	public String execute() {
 		if (!"1".equals(status)) {
-			writeLog("{\"status\":\"0\",\"message\":\"接收为失败消息，不处理，errorcode为：" + errorCode + "\"}");
-			return "{\"status\":\"0\",\"message\":\"接收为失败消息，不处理，errorcode为：" + errorCode + "\"}";
+			create("601");
+			return "{\"status\":\"0\",\"message\":\"接收为失败消息，不处理，errorcode为：" + errorCode + "，发送了消息提醒\"}";
 		}
+
 		
 		String xgfj = getXGFJ(requestid);
 		String xgfj1 = getXGFJ1(requestid);
@@ -129,8 +136,85 @@ public class Wait extends BaseBean implements WaitService {
 			writeLog("{\"status\":\"0\",\"message\":\"流程自动提交失败\"}");
 			return "{\"status\":\"0\",\"message\":\"流程自动提交失败\"}";
 		}
+		if(WarnTimeFlag.equalsIgnoreCase("y")) {
+            create("601");
+		}
 		writeLog("{\"status\":\"1\",\"message\":\"处理成功\"}");
 		return "{\"status\":\"1\",\"message\":\"处理成功\"}";
+	}
+
+	public String create(String roleid){
+//        String sql = "select creater from workflow_requestbase where requestid = '"+this.requestid+"'";
+//			RecordSet recordSet = new RecordSet();
+//			recordSet.execute(sql);
+//			recordSet.next();
+//			String creater = Util.null2String(recordSet.getString("creater"));
+
+        String _gdtxrSQL = "select resourceid from HRMROLEMEMBERS where roleid = "+roleid+"";
+        weaver.conn.RecordSet rs = new weaver.conn.RecordSet();
+        rs.execute(_gdtxrSQL);
+        java.util.List<String> _gdtxrList = new java.util.ArrayList<String>();
+        int count = rs.getCounts();
+        int c = 0;
+        StringBuffer sb = new StringBuffer(",");
+        while(rs.next()){
+            String _resourceid = new weaver.general.Util().null2String(rs.getString("resourceid"));
+            _gdtxrList.add(_resourceid);
+            sb.append(_resourceid);
+            sb.append(",");
+        }
+        String reqid = "";
+        String sbs = sb.toString();
+        if(!sbs.equals(",")) {
+            sbs = sbs.substring(1,sbs.length()-1);
+            Map<String, String> map = new HashMap<String, String>();
+            map.put("mutiresource",sbs);
+            try {
+                String datetime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+                reqid = createRequest(map,"1","1","ceb转pdf超过3分钟提醒-"+datetime);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return reqid;
+    }
+
+	public String createRequest(Map<String, String> map, String creater, String workflowid, String requestname) throws Exception {
+		// 主字段
+		WorkflowRequestTableField[] wrti = new WorkflowRequestTableField[map.size()]; // 字段信息
+		int count = 0;
+		for (Map.Entry<String, String> entry : map.entrySet()) {
+			String key = entry.getKey();
+			String val = entry.getValue();
+			wrti[count] = new WorkflowRequestTableField();
+			wrti[count].setFieldName(key);//
+			wrti[count].setFieldValue(val);//
+			wrti[count].setView(true);// 字段是否可见
+			wrti[count].setEdit(true);// 字段是否可编辑
+			count++;
+		}
+
+		WorkflowRequestTableRecord[] wrtri = new WorkflowRequestTableRecord[1];// 主字段只有一行数据
+		wrtri[0] = new WorkflowRequestTableRecord();
+		wrtri[0].setWorkflowRequestTableFields(wrti);
+
+		WorkflowMainTableInfo wmi = new WorkflowMainTableInfo();
+		wmi.setRequestRecords(wrtri);
+
+		// 添加工作流id
+		WorkflowBaseInfo wbi = new WorkflowBaseInfo();
+		wbi.setWorkflowId(workflowid);// workflowid 流程接口演示流程2016==38
+
+		WorkflowRequestInfo wri = new WorkflowRequestInfo();// 流程基本信息
+		wri.setCreatorId(creater);// 创建人id
+		wri.setRequestLevel("0");// 0 正常，1重要，2紧急
+		wri.setRequestName(requestname);
+		wri.setWorkflowMainTableInfo(wmi);// 添加主字段数据
+		wri.setWorkflowBaseInfo(wbi);
+
+		WorkflowService WorkflowServicePortTypeProxy = new WorkflowServiceImpl();
+		String requestid = WorkflowServicePortTypeProxy.doCreateWorkflowRequest(wri, Integer.parseInt(creater));
+		return requestid;
 	}
 
 	/**
